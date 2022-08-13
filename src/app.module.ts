@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksService } from './services/task.service';
-import { ProcessService } from './services/process.service';
+import { RegionService } from './services/region.service';
 
 @Module({
   imports: [ScheduleModule.forRoot()],
   controllers: [],
-  providers: [TasksService, ProcessService],
-  exports: [ProcessService],
+  providers: [TasksService, RegionService],
+  exports: [RegionService],
 })
 export class AppModule {}
