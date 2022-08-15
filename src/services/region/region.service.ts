@@ -1,19 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { RegionBase } from '../interfaces/region/region-base.interface';
-import { Region } from '../interfaces/region/region.interface';
+import { RegionBase } from '../../interfaces/region/region-base.interface';
+import { Region } from '../../interfaces/region/region.interface';
 
 @Injectable()
 export class RegionService {
-  async getRegions(): Promise<any[] | void> {
+  async getRegions(): Promise<Array<Region>> {
     return axios
       .get('https://emapa.fra1.cdn.digitaloceanspaces.com/statuses.json')
       .then(async (response) => {
         return await this.transformData(response.data.states);
       })
       .catch(function (error) {
-        console.log(error);
+        throw new Error(error);
       });
+  }
+
+  async getBiggerPoint(regions: Array<Region>): Promise<number> {
+    let biggerPoint = 0;
+    regions.forEach((region) => {
+      if (region.enabled && region.point > biggerPoint) {
+        biggerPoint = region.point;
+      }
+    });
+    return biggerPoint;
   }
 
   async transformData(data): Promise<Array<Region>> {
