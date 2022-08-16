@@ -5,10 +5,14 @@ import { Region } from '../../interfaces/region/region.interface';
 export class PointBehaviourService {
   activeRegions: Array<Region>;
 
-  async start(biggerPoint: number, regions: Array<Region>): Promise<number> {
+  async start(
+    biggerPoint: number,
+    regions: Array<Region>,
+    currentDate: Date,
+  ): Promise<number> {
     this.activeRegions = await this.setActiveRegions(regions);
     biggerPoint = await this.towardsBehaviour(biggerPoint);
-    biggerPoint = await this.timeBehaviour(biggerPoint, new Date());
+    biggerPoint = await this.timeBehaviour(biggerPoint, currentDate);
     return biggerPoint;
   }
 
@@ -35,7 +39,7 @@ export class PointBehaviourService {
     return newPoint;
   }
 
-  async timeBehaviour(biggerPoint: number, currentDate): Promise<number> {
+  async timeBehaviour(biggerPoint: number, currentDate: Date): Promise<number> {
     let newPoint = biggerPoint;
     const hour = currentDate.getHours();
     const day = currentDate.getDay();
@@ -57,9 +61,7 @@ export class PointBehaviourService {
     return newPoint;
   }
 
-  private async setActiveRegions(
-    regions: Array<Region>,
-  ): Promise<Array<Region>> {
+  async setActiveRegions(regions: Array<Region>): Promise<Array<Region>> {
     const activeRegions = [];
     regions.forEach((region) => {
       if (region.enabled) {
@@ -69,11 +71,11 @@ export class PointBehaviourService {
     return activeRegions;
   }
 
-  private async getRegionsKeys(): Promise<Array<number>> {
+  async getRegionsKeys(): Promise<Array<number>> {
     return this.activeRegions.map((region) => region.id);
   }
 
-  private async regionValueExist(
+  async regionValueExist(
     regionsArray: Array<number>,
     regionsKeys: Array<number>,
   ): Promise<boolean> {

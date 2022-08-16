@@ -26,7 +26,7 @@ export class RegionService {
     return biggerPoint;
   }
 
-  async transformData(data): Promise<Array<Region>> {
+  async transformData(data: any): Promise<Array<Region>> {
     const statesArray: Region[] = [];
     if (data) {
       const regions = await this.getRegionsLibrary();

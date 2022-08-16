@@ -9,6 +9,7 @@ export class TasksService {
   private readonly logger = new Logger(TasksService.name);
   private _regionService: RegionService;
   private _pointBehaviourService: PointBehaviourService;
+  currentDate: Date;
 
   constructor(
     regionService: RegionService,
@@ -16,6 +17,7 @@ export class TasksService {
   ) {
     this._regionService = regionService;
     this._pointBehaviourService = pointBehaviourService;
+    this.currentDate = new Date();
   }
 
   @Cron(CronExpression.EVERY_10_SECONDS)
@@ -25,9 +27,10 @@ export class TasksService {
       const biggerPoint: number = await this._regionService.getBiggerPoint(
         regions,
       );
-      const result = await this._pointBehaviourService.start(
+      const result: number = await this._pointBehaviourService.start(
         biggerPoint,
         regions,
+        this.currentDate,
       );
       this.logger.debug(result);
     } catch (error) {
