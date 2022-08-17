@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Unit, UnitDocument } from '../../schemas/unit.schema';
-import { CreateUnitDto } from '../../interfaces/unit/create-unit.dto';
+import { Unit, UnitDocument } from './schemas/unit.schema';
+import { CreateUnitDto } from './dtos/create-unit.dto';
 
 @Injectable()
-export class UnitService {
+export class UnitRepository {
   constructor(@InjectModel(Unit.name) private unitModel: Model<UnitDocument>) {}
 
   async create(createUnitDto: CreateUnitDto): Promise<Unit> {

@@ -5,9 +5,10 @@ import { RegionService } from './services/region/region.service';
 import { PointBehaviourService } from './services/point-behaviour/point-behaviour.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AlarmService } from './services/alarm/alarm.service';
-import { Alarm, AlarmSchema } from './schemas/alarm.schema';
-import { Unit, UnitSchema } from './schemas/unit.schema';
-import { UnitService } from './services/alarm/unit.service';
+import { Alarm, AlarmSchema } from './repositories/alarm/schemas/alarm.schema';
+import { Unit, UnitSchema } from './repositories/unit/schemas/unit.schema';
+import { AlarmRepository } from './repositories/alarm/alarm.repository';
+import { UnitRepository } from './repositories/unit/unit.repository';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { UnitService } from './services/alarm/unit.service';
     RegionService,
     PointBehaviourService,
     AlarmService,
-    UnitService,
+    AlarmRepository,
+    UnitRepository,
   ],
 })
 export class AppModule {}

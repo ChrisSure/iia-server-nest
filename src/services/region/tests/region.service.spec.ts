@@ -3,7 +3,7 @@ import { regionsMock } from './mock/regions.mock';
 import { regionsFullMock } from './mock/regions-full.mock';
 import { regionsBiggerMock } from './mock/regions-bigger.mock';
 import axios, { AxiosResponse } from 'axios';
-import { Region } from '../../../interfaces/region/region.interface';
+import { Region } from '../interfaces/region.interface';
 jest.mock('axios');
 
 describe('RegionService', () => {

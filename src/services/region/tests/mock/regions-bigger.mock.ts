@@ -1,4 +1,4 @@
-import { Region } from '../../../../interfaces/region/region.interface';
+import { Region } from '../../interfaces/region.interface';
 
 export function regionsBiggerMock(): Array<Region> {
   const disabledDate = new Date();

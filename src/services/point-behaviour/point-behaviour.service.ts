@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Region } from '../../interfaces/region/region.interface';
+import { Region } from '../region/interfaces/region.interface';
 
 @Injectable()
 export class PointBehaviourService {

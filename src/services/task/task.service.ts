@@ -1,12 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { RegionService } from '../region/region.service';
-import { Region } from '../../interfaces/region/region.interface';
+import { Region } from '../region/interfaces/region.interface';
 import { PointBehaviourService } from '../point-behaviour/point-behaviour.service';
 import { AlarmService } from '../alarm/alarm.service';
-import { UnitService } from '../alarm/unit.service';
-import { CreateAlarmDto } from '../../interfaces/alarm/create-alarm.dto';
-import { CreateUnitDto } from '../../interfaces/unit/create-unit.dto';
+import { CreateAlarmDto } from '../../repositories/alarm/dtos/create-alarm.dto';
+import { CreateUnitDto } from '../../repositories/unit/dtos/create-unit.dto';
+import { AlarmRepository } from '../../repositories/alarm/alarm.repository';
+import { UnitRepository } from '../../repositories/unit/unit.repository';
 
 @Injectable()
 export class TasksService {
@@ -14,19 +15,22 @@ export class TasksService {
   private _regionService: RegionService;
   private _pointBehaviourService: PointBehaviourService;
   private _alarmService: AlarmService;
-  private _unitService: UnitService;
+  private _alarmRepository: AlarmRepository;
+  private _unitRepository: UnitRepository;
   currentDate: Date;
 
   constructor(
     regionService: RegionService,
     pointBehaviourService: PointBehaviourService,
     alarmService: AlarmService,
-    unitService: UnitService,
+    alarmRepository: AlarmRepository,
+    unitRepository: UnitRepository,
   ) {
     this._regionService = regionService;
     this._pointBehaviourService = pointBehaviourService;
     this._alarmService = alarmService;
-    this._unitService = unitService;
+    this._alarmRepository = alarmRepository;
+    this._unitRepository = unitRepository;
     this.currentDate = new Date();
   }
 
@@ -42,8 +46,8 @@ export class TasksService {
         regions,
         this.currentDate,
       );
-      const lastAlarm = await this._alarmService.findLast();
-      const lastUnit = await this._unitService.findLast();
+      const lastAlarm = await this._alarmRepository.findLast();
+      const lastUnit = await this._unitRepository.findLast();
 
       const isAlarmGone = await this._alarmService.isAlarmGone(lastAlarm.date);
       if (!isAlarmGone && result !== 100) {
@@ -51,13 +55,13 @@ export class TasksService {
       }
       if (result === 100 && isAlarmGone) {
         const createAlarmDto: CreateAlarmDto = { date: new Date() };
-        await this._alarmService.create(createAlarmDto);
+        await this._alarmRepository.create(createAlarmDto);
       }
 
       //await messengerNotifyActionModule.messengerNotifyAction(result, lastResult.result);
 
       const createUnitDto: CreateUnitDto = { point: result, date: new Date() };
-      await this._unitService.create(createUnitDto);
+      await this._unitRepository.create(createUnitDto);
 
       this.logger.debug(lastUnit);
     } catch (error) {

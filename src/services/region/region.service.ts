@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { RegionBase } from '../../interfaces/region/region-base.interface';
-import { Region } from '../../interfaces/region/region.interface';
+import { RegionBase } from './interfaces/region-base.interface';
+import { Region } from './interfaces/region.interface';
 
 @Injectable()
 export class RegionService {

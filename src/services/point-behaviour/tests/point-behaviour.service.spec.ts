@@ -1,6 +1,6 @@
 import { PointBehaviourService } from '../point-behaviour.service';
 import { regionsMock } from './mock/regions.mock';
-import { Region } from '../../../interfaces/region/region.interface';
+import { Region } from '../../region/interfaces/region.interface';
 
 describe('PointBehaviourService', () => {
   const service: PointBehaviourService = new PointBehaviourService();
