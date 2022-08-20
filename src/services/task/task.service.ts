@@ -8,6 +8,8 @@ import { CreateAlarmDto } from '../../repositories/alarm/dtos/create-alarm.dto';
 import { CreateUnitDto } from '../../repositories/unit/dtos/create-unit.dto';
 import { AlarmRepository } from '../../repositories/alarm/alarm.repository';
 import { UnitRepository } from '../../repositories/unit/unit.repository';
+import { Alarm } from '../../repositories/alarm/schemas/alarm.schema';
+import { Unit } from '../../repositories/unit/schemas/unit.schema';
 
 @Injectable()
 export class TasksService {
@@ -35,7 +37,7 @@ export class TasksService {
   }
 
   @Cron(CronExpression.EVERY_10_SECONDS)
-  async handleCronAlarm() {
+  async handleCronAlarm(): Promise<number> {
     try {
       const regions: Array<Region> = await this._regionService.getRegions();
       const biggerPoint: number = await this._regionService.getBiggerPoint(
@@ -46,10 +48,12 @@ export class TasksService {
         regions,
         this.currentDate,
       );
-      const lastAlarm = await this._alarmRepository.findLast();
-      const lastUnit = await this._unitRepository.findLast();
+      const lastAlarm: Alarm = await this._alarmRepository.findLast();
+      const lastUnit: Unit = await this._unitRepository.findLast();
 
-      const isAlarmGone = await this._alarmService.isAlarmGone(lastAlarm.date);
+      const isAlarmGone: boolean = await this._alarmService.isAlarmGone(
+        lastAlarm.date,
+      );
       if (!isAlarmGone && result !== 100) {
         result = 0;
       }
@@ -58,12 +62,14 @@ export class TasksService {
         await this._alarmRepository.create(createAlarmDto);
       }
 
-      //await messengerNotifyActionModule.messengerNotifyAction(result, lastResult.result);
+      //await messengerNotifyActionModule.messengerNotifyAction(result, lastUnit.point);
 
       const createUnitDto: CreateUnitDto = { point: result, date: new Date() };
       await this._unitRepository.create(createUnitDto);
 
-      this.logger.debug(lastUnit);
+      //this.logger.debug(lastUnit);
+
+      return result;
     } catch (error) {
       this.logger.error(error);
     }
