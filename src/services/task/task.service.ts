@@ -10,6 +10,7 @@ import { AlarmRepository } from '../../repositories/alarm/alarm.repository';
 import { UnitRepository } from '../../repositories/unit/unit.repository';
 import { Alarm } from '../../repositories/alarm/schemas/alarm.schema';
 import { Unit } from '../../repositories/unit/schemas/unit.schema';
+import { MessengerService } from '../messenger/messenger.service';
 
 @Injectable()
 export class TasksService {
@@ -17,6 +18,7 @@ export class TasksService {
   private _regionService: RegionService;
   private _pointBehaviourService: PointBehaviourService;
   private _alarmService: AlarmService;
+  private _messengerService: MessengerService;
   private _alarmRepository: AlarmRepository;
   private _unitRepository: UnitRepository;
   currentDate: Date;
@@ -25,18 +27,20 @@ export class TasksService {
     regionService: RegionService,
     pointBehaviourService: PointBehaviourService,
     alarmService: AlarmService,
+    messengerService: MessengerService,
     alarmRepository: AlarmRepository,
     unitRepository: UnitRepository,
   ) {
     this._regionService = regionService;
     this._pointBehaviourService = pointBehaviourService;
     this._alarmService = alarmService;
+    this._messengerService = messengerService;
     this._alarmRepository = alarmRepository;
     this._unitRepository = unitRepository;
     this.currentDate = new Date();
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_30_SECONDS)
   async handleCronAlarm(): Promise<number> {
     try {
       const regions: Array<Region> = await this._regionService.getRegions();
@@ -62,21 +66,19 @@ export class TasksService {
         await this._alarmRepository.create(createAlarmDto);
       }
 
-      //await messengerNotifyActionModule.messengerNotifyAction(result, lastUnit.point);
+      await this._messengerService.telegramNotify(result, lastUnit.point);
 
       const createUnitDto: CreateUnitDto = { point: result, date: new Date() };
       await this._unitRepository.create(createUnitDto);
-
-      //this.logger.debug(lastUnit);
-
       return result;
     } catch (error) {
       this.logger.error(error);
     }
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
-  handleCronGarbage() {
+  @Cron(CronExpression.EVERY_3_HOURS)
+  async handleCronGarbage() {
+    await this._unitRepository.removeAllUnits();
     this.logger.debug('Garbage');
   }
 }

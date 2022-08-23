@@ -10,12 +10,14 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Alarm } from '../../../repositories/alarm/schemas/alarm.schema';
 import { Unit } from '../../../repositories/unit/schemas/unit.schema';
 import { regionsMock } from './mock/regions.mock';
+import { MessengerService } from '../../messenger/messenger.service';
 
 describe('TasksService', () => {
   let tasksService: TasksService;
   let regionService: RegionService;
   let pointBehaviourService: PointBehaviourService;
   let alarmService: AlarmService;
+  let messengerService: MessengerService;
   let alarmRepository: AlarmRepository;
   let unitRepository: UnitRepository;
 
@@ -27,6 +29,7 @@ describe('TasksService', () => {
         RegionService,
         PointBehaviourService,
         AlarmService,
+        MessengerService,
         AlarmRepository,
         { provide: getModelToken(Alarm.name), useValue: jest.fn() },
         UnitRepository,
@@ -40,6 +43,7 @@ describe('TasksService', () => {
       PointBehaviourService,
     );
     alarmService = module.get<AlarmService>(AlarmService);
+    messengerService = module.get<MessengerService>(MessengerService);
     alarmRepository = module.get<AlarmRepository>(AlarmRepository);
     unitRepository = module.get<UnitRepository>(UnitRepository);
   });
@@ -96,6 +100,7 @@ describe('TasksService', () => {
     jest
       .spyOn(alarmRepository, 'create')
       .mockImplementation(() => createAlarmPromise.then());
+    jest.spyOn(messengerService, 'telegramNotify').mockImplementation();
     jest
       .spyOn(unitRepository, 'create')
       .mockImplementation(() => createUnitPromise.then());
@@ -156,6 +161,7 @@ describe('TasksService', () => {
     jest
       .spyOn(alarmRepository, 'create')
       .mockImplementation(() => createAlarmPromise.then());
+    jest.spyOn(messengerService, 'telegramNotify').mockImplementation();
     jest
       .spyOn(unitRepository, 'create')
       .mockImplementation(() => createUnitPromise.then());
@@ -213,6 +219,7 @@ describe('TasksService', () => {
     jest
       .spyOn(alarmService, 'isAlarmGone')
       .mockImplementation(() => isAlarmGonePromise.then());
+    jest.spyOn(messengerService, 'telegramNotify').mockImplementation();
     jest
       .spyOn(alarmRepository, 'create')
       .mockImplementation(() => createAlarmPromise.then());

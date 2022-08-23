@@ -17,4 +17,9 @@ export class UnitRepository {
     const lastUnit = await this.unitModel.find({}).sort({ _id: -1 }).limit(1);
     return lastUnit[0];
   }
+
+  async removeAllUnits(): Promise<void> {
+    const currentTime = new Date().getTime() - 300000;
+    await this.unitModel.deleteMany({ date: { $lt: currentTime } });
+  }
 }

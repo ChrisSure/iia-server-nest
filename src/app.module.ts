@@ -9,6 +9,7 @@ import { Alarm, AlarmSchema } from './repositories/alarm/schemas/alarm.schema';
 import { Unit, UnitSchema } from './repositories/unit/schemas/unit.schema';
 import { AlarmRepository } from './repositories/alarm/alarm.repository';
 import { UnitRepository } from './repositories/unit/unit.repository';
+import { MessengerService } from './services/messenger/messenger.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { UnitRepository } from './repositories/unit/unit.repository';
     RegionService,
     PointBehaviourService,
     AlarmService,
+    MessengerService,
     AlarmRepository,
     UnitRepository,
   ],
