@@ -10,6 +10,7 @@ import { Unit, UnitSchema } from './repositories/unit/schemas/unit.schema';
 import { AlarmRepository } from './repositories/alarm/alarm.repository';
 import { UnitRepository } from './repositories/unit/unit.repository';
 import { MessengerService } from './services/messenger/messenger.service';
+import { HomeController } from './controllers/home.controller';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { MessengerService } from './services/messenger/messenger.service';
       { name: Unit.name, schema: UnitSchema },
     ]),
   ],
-  controllers: [],
+  controllers: [HomeController],
   providers: [
     TasksService,
     RegionService,
