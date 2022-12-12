@@ -17,6 +17,12 @@ export class AlarmRepository {
 
   async findLast(): Promise<Alarm> {
     const lastAlarm = await this.alarmModel.find({}).sort({ _id: -1 }).limit(1);
-    return lastAlarm[0];
+    if (lastAlarm) {
+      return lastAlarm[0];
+    }
+  }
+
+  async getAll(): Promise<Alarm[]> {
+    return await this.alarmModel.find({}).exec();
   }
 }

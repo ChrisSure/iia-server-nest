@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Region } from '../region/interfaces/region.interface';
+import { Statistic } from '../statistic/interfaces/statistic.interface';
 
 @Injectable()
 export class PointBehaviourService {
@@ -9,10 +10,11 @@ export class PointBehaviourService {
     biggerPoint: number,
     regions: Array<Region>,
     currentDate: Date,
+    statisticReport: Statistic
   ): Promise<number> {
     this.activeRegions = await this.setActiveRegions(regions);
     biggerPoint = await this.towardsBehaviour(biggerPoint);
-    biggerPoint = await this.timeBehaviour(biggerPoint, currentDate);
+    biggerPoint = await this.timeBehaviour(biggerPoint, currentDate, statisticReport);
     return biggerPoint;
   }
 
@@ -39,22 +41,18 @@ export class PointBehaviourService {
     return newPoint;
   }
 
-  async timeBehaviour(biggerPoint: number, currentDate: Date): Promise<number> {
+  async timeBehaviour(biggerPoint: number, currentDate: Date, statisticReport: Statistic): Promise<number> {
     let newPoint = biggerPoint;
-    const hour = currentDate.getHours();
-    const day = currentDate.getDay();
+    const hour = currentDate.getUTCHours();
+    const day = currentDate.getUTCDay();
 
     if (newPoint < 80 && newPoint > 4) {
-      if (day === 2) {
+      if (day === (statisticReport.maxDay) + 1) {
         newPoint = newPoint + 5;
       }
 
-      if (hour === 11 || hour === 20) {
+      if (hour === statisticReport.firstMaxHour || hour === statisticReport.secondMaxHour) {
         newPoint = newPoint + 5;
-      }
-
-      if (hour === 0 || hour === 14) {
-        newPoint = newPoint - 5;
       }
     }
 

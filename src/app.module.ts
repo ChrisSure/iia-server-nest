@@ -11,14 +11,13 @@ import { AlarmRepository } from './repositories/alarm/alarm.repository';
 import { UnitRepository } from './repositories/unit/unit.repository';
 import { MessengerService } from './services/messenger/messenger.service';
 import { HomeController } from './controllers/home.controller';
+import { StatisticService } from './services/statistic/statistic.service';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
     MongooseModule.forRoot(
-      process.env.ENV === 'prod'
-        ? 'mongodb+srv://Mbappe9119:AXmgL5D6hdATYtM@ifairalarm.19uvw.mongodb.net/?retryWrites=true&w=majority'
-        : 'mongodb+srv://Mbappe9119:AXmgL5D6hdATYtM@ifairalarmdev.19uvw.mongodb.net/?retryWrites=true&w=majority',
+      'mongodb+srv://Mbappe9119:AXmgL5D6hdATYtM@ifairalarmdev.19uvw.mongodb.net/?retryWrites=true&w=majority',
     ),
     MongooseModule.forFeature([
       { name: Alarm.name, schema: AlarmSchema },
@@ -32,6 +31,7 @@ import { HomeController } from './controllers/home.controller';
     PointBehaviourService,
     AlarmService,
     MessengerService,
+    StatisticService,
     AlarmRepository,
     UnitRepository,
   ],

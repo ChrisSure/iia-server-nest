@@ -11,6 +11,8 @@ import { Alarm } from '../../../repositories/alarm/schemas/alarm.schema';
 import { Unit } from '../../../repositories/unit/schemas/unit.schema';
 import { regionsMock } from './mock/regions.mock';
 import { MessengerService } from '../../messenger/messenger.service';
+import { StatisticService } from '../../statistic/statistic.service';
+import { Statistic } from '../../statistic/interfaces/statistic.interface';
 
 describe('TasksService', () => {
   let tasksService: TasksService;
@@ -18,6 +20,7 @@ describe('TasksService', () => {
   let pointBehaviourService: PointBehaviourService;
   let alarmService: AlarmService;
   let messengerService: MessengerService;
+  let statisticService: StatisticService;
   let alarmRepository: AlarmRepository;
   let unitRepository: UnitRepository;
 
@@ -30,6 +33,7 @@ describe('TasksService', () => {
         PointBehaviourService,
         AlarmService,
         MessengerService,
+        StatisticService,
         AlarmRepository,
         { provide: getModelToken(Alarm.name), useValue: jest.fn() },
         UnitRepository,
@@ -44,11 +48,16 @@ describe('TasksService', () => {
     );
     alarmService = module.get<AlarmService>(AlarmService);
     messengerService = module.get<MessengerService>(MessengerService);
+    statisticService = module.get<StatisticService>(StatisticService);
     alarmRepository = module.get<AlarmRepository>(AlarmRepository);
     unitRepository = module.get<UnitRepository>(UnitRepository);
   });
 
   it('handleCronAlarm', async () => {
+    const getReportPromise = new Promise((resolve) => {
+      const statistic: Statistic = { firstMaxHour: 12, secondMaxHour: 8, maxDay: 0 };
+      resolve(statistic);
+    });
     const getRegionsPromise = new Promise((resolve) => {
       const regions: Array<Region> = regionsMock();
       resolve(regions);
@@ -61,6 +70,11 @@ describe('TasksService', () => {
     });
     const isAlarmGonePromise = new Promise((resolve) => {
       resolve(true);
+    });
+    const getAllAlarmsPromise = new Promise((resolve) => {
+      const alarm1: Alarm = { date: new Date(new Date().getTime() - 3600000) };
+      const alarm2: Alarm = { date: new Date(new Date().getTime() - 3610000) };
+      resolve([alarm1, alarm2]);
     });
     const findLastAlarmPromise = new Promise((resolve) => {
       const alarm: Alarm = { date: new Date(new Date().getTime() - 3600000) };
@@ -80,9 +94,6 @@ describe('TasksService', () => {
     });
 
     jest
-      .spyOn(regionService, 'getRegions')
-      .mockImplementation(() => getRegionsPromise.then());
-    jest
       .spyOn(regionService, 'getBiggerPoint')
       .mockImplementation(() => getBiggerPointPromise.then());
     jest
@@ -91,6 +102,15 @@ describe('TasksService', () => {
     jest
       .spyOn(unitRepository, 'findLast')
       .mockImplementation(() => isAlarmUnitPromise.then());
+    jest
+      .spyOn(alarmRepository, 'getAll')
+      .mockImplementation(() => getAllAlarmsPromise.then());
+    jest
+      .spyOn(statisticService, 'getReport')
+      .mockImplementation(() => getReportPromise.then());
+    jest
+      .spyOn(regionService, 'getRegions')
+      .mockImplementation(() => getRegionsPromise.then());
     jest
       .spyOn(pointBehaviourService, 'start')
       .mockImplementation(() => startPromise.then());
@@ -110,6 +130,10 @@ describe('TasksService', () => {
   });
 
   it('handleCronAlarm is alarm not gone', async () => {
+    const getReportPromise = new Promise((resolve) => {
+      const statistic: Statistic = { firstMaxHour: 12, secondMaxHour: 8, maxDay: 0 };
+      resolve(statistic);
+    });
     const getRegionsPromise = new Promise((resolve) => {
       const regions: Array<Region> = regionsMock();
       resolve(regions);
@@ -122,6 +146,11 @@ describe('TasksService', () => {
     });
     const isAlarmGonePromise = new Promise((resolve) => {
       resolve(false);
+    });
+    const getAllAlarmsPromise = new Promise((resolve) => {
+      const alarm1: Alarm = { date: new Date(new Date().getTime() - 3600000) };
+      const alarm2: Alarm = { date: new Date(new Date().getTime() - 3610000) };
+      resolve([alarm1, alarm2]);
     });
     const findLastAlarmPromise = new Promise((resolve) => {
       const alarm: Alarm = { date: new Date(new Date().getTime() - 3600000) };
@@ -152,6 +181,12 @@ describe('TasksService', () => {
     jest
       .spyOn(unitRepository, 'findLast')
       .mockImplementation(() => isAlarmUnitPromise.then());
+    jest
+      .spyOn(alarmRepository, 'getAll')
+      .mockImplementation(() => getAllAlarmsPromise.then());
+    jest
+      .spyOn(regionService, 'getRegions')
+      .mockImplementation(() => getRegionsPromise.then());
     jest
       .spyOn(pointBehaviourService, 'start')
       .mockImplementation(() => startPromise.then());
@@ -171,6 +206,10 @@ describe('TasksService', () => {
   });
 
   it('handleCronAlarm is alarm not gone bur result 100', async () => {
+    const getReportPromise = new Promise((resolve) => {
+      const statistic: Statistic = { firstMaxHour: 12, secondMaxHour: 8, maxDay: 0 };
+      resolve(statistic);
+    });
     const getRegionsPromise = new Promise((resolve) => {
       const regions: Array<Region> = regionsMock();
       resolve(regions);
@@ -183,6 +222,11 @@ describe('TasksService', () => {
     });
     const isAlarmGonePromise = new Promise((resolve) => {
       resolve(false);
+    });
+    const getAllAlarmsPromise = new Promise((resolve) => {
+      const alarm1: Alarm = { date: new Date(new Date().getTime() - 3600000) };
+      const alarm2: Alarm = { date: new Date(new Date().getTime() - 3610000) };
+      resolve([alarm1, alarm2]);
     });
     const findLastAlarmPromise = new Promise((resolve) => {
       const alarm: Alarm = { date: new Date(new Date().getTime() - 3600000) };
@@ -213,6 +257,12 @@ describe('TasksService', () => {
     jest
       .spyOn(unitRepository, 'findLast')
       .mockImplementation(() => isAlarmUnitPromise.then());
+    jest
+      .spyOn(alarmRepository, 'getAll')
+      .mockImplementation(() => getAllAlarmsPromise.then());
+    jest
+      .spyOn(statisticService, 'getReport')
+      .mockImplementation(() => getReportPromise.then());
     jest
       .spyOn(pointBehaviourService, 'start')
       .mockImplementation(() => startPromise.then());

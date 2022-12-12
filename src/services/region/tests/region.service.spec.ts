@@ -54,7 +54,7 @@ describe('RegionService', () => {
     const response = await service.getRegions();
     expect(response[0].id).toEqual(1);
     expect(response[0].key).toEqual('Вінницька область');
-    expect(response[0].point).toEqual(50);
+    expect(response[0].point).toEqual(80);
 
     expect(response[1].id).toEqual(2);
     expect(response[1].key).toEqual('Волинська область');
@@ -71,7 +71,7 @@ describe('RegionService', () => {
 
     expect(response[4].id).toEqual(5);
     expect(response[4].key).toEqual('Житомирська область');
-    expect(response[4].point).toEqual(40);
+    expect(response[4].point).toEqual(60);
 
     expect(response[5].id).toEqual(6);
     expect(response[5].key).toEqual('Закарпатська область');
@@ -88,11 +88,11 @@ describe('RegionService', () => {
 
     expect(response[8].id).toEqual(9);
     expect(response[8].key).toEqual('Київська область');
-    expect(response[8].point).toEqual(20);
+    expect(response[8].point).toEqual(40);
 
     expect(response[9].id).toEqual(10);
     expect(response[9].key).toEqual('Кіровоградська область');
-    expect(response[9].point).toEqual(15);
+    expect(response[9].point).toEqual(25);
     expect(response[9].enabled).toBeTruthy();
 
     expect(response[10].id).toEqual(11);
@@ -105,15 +105,15 @@ describe('RegionService', () => {
 
     expect(response[12].id).toEqual(13);
     expect(response[12].key).toEqual('Миколаївська область');
-    expect(response[12].point).toEqual(15);
+    expect(response[12].point).toEqual(40);
 
     expect(response[13].id).toEqual(14);
     expect(response[13].key).toEqual('Одеська область');
-    expect(response[13].point).toEqual(20);
+    expect(response[13].point).toEqual(45);
 
     expect(response[14].id).toEqual(15);
     expect(response[14].key).toEqual('Полтавська область');
-    expect(response[14].point).toEqual(10);
+    expect(response[14].point).toEqual(20);
 
     expect(response[15].id).toEqual(16);
     expect(response[15].key).toEqual('Рівненська область');
@@ -135,15 +135,15 @@ describe('RegionService', () => {
 
     expect(response[19].id).toEqual(20);
     expect(response[19].key).toEqual('Херсонська область');
-    expect(response[19].point).toEqual(5);
+    expect(response[19].point).toEqual(15);
 
     expect(response[20].id).toEqual(21);
     expect(response[20].key).toEqual('Хмельницька область');
-    expect(response[20].point).toEqual(65);
+    expect(response[20].point).toEqual(80);
 
     expect(response[21].id).toEqual(22);
     expect(response[21].key).toEqual('Черкаська область');
-    expect(response[21].point).toEqual(15);
+    expect(response[21].point).toEqual(25);
 
     expect(response[22].id).toEqual(23);
     expect(response[22].key).toEqual('Чернівецька область');
@@ -152,14 +152,14 @@ describe('RegionService', () => {
 
     expect(response[23].id).toEqual(24);
     expect(response[23].key).toEqual('Чернігівська область');
-    expect(response[23].point).toEqual(15);
+    expect(response[23].point).toEqual(25);
   });
 
   it('getRegionsLibrary', async () => {
     const response = await service.getRegionsLibrary();
     expect(response[0].id).toEqual(1);
     expect(response[0].name).toEqual('Вінницька область');
-    expect(response[0].point).toEqual(50);
+    expect(response[0].point).toEqual(80);
 
     expect(response[1].id).toEqual(2);
     expect(response[1].name).toEqual('Волинська область');
@@ -175,7 +175,7 @@ describe('RegionService', () => {
 
     expect(response[4].id).toEqual(5);
     expect(response[4].name).toEqual('Житомирська область');
-    expect(response[4].point).toEqual(40);
+    expect(response[4].point).toEqual(60);
 
     expect(response[5].id).toEqual(6);
     expect(response[5].name).toEqual('Закарпатська область');
@@ -191,11 +191,11 @@ describe('RegionService', () => {
 
     expect(response[8].id).toEqual(9);
     expect(response[8].name).toEqual('Київська область');
-    expect(response[8].point).toEqual(20);
+    expect(response[8].point).toEqual(40);
 
     expect(response[9].id).toEqual(10);
     expect(response[9].name).toEqual('Кіровоградська область');
-    expect(response[9].point).toEqual(15);
+    expect(response[9].point).toEqual(25);
 
     expect(response[10].id).toEqual(11);
     expect(response[10].name).toEqual('Луганська область');
@@ -207,15 +207,15 @@ describe('RegionService', () => {
 
     expect(response[12].id).toEqual(13);
     expect(response[12].name).toEqual('Миколаївська область');
-    expect(response[12].point).toEqual(15);
+    expect(response[12].point).toEqual(40);
 
     expect(response[13].id).toEqual(14);
     expect(response[13].name).toEqual('Одеська область');
-    expect(response[13].point).toEqual(20);
+    expect(response[13].point).toEqual(45);
 
     expect(response[14].id).toEqual(15);
     expect(response[14].name).toEqual('Полтавська область');
-    expect(response[14].point).toEqual(10);
+    expect(response[14].point).toEqual(20);
 
     expect(response[15].id).toEqual(16);
     expect(response[15].name).toEqual('Рівненська область');
@@ -235,15 +235,15 @@ describe('RegionService', () => {
 
     expect(response[19].id).toEqual(20);
     expect(response[19].name).toEqual('Херсонська область');
-    expect(response[19].point).toEqual(5);
+    expect(response[19].point).toEqual(15);
 
     expect(response[20].id).toEqual(21);
     expect(response[20].name).toEqual('Хмельницька область');
-    expect(response[20].point).toEqual(65);
+    expect(response[20].point).toEqual(80);
 
     expect(response[21].id).toEqual(22);
     expect(response[21].name).toEqual('Черкаська область');
-    expect(response[21].point).toEqual(15);
+    expect(response[21].point).toEqual(25);
 
     expect(response[22].id).toEqual(23);
     expect(response[22].name).toEqual('Чернівецька область');
@@ -251,14 +251,14 @@ describe('RegionService', () => {
 
     expect(response[23].id).toEqual(24);
     expect(response[23].name).toEqual('Чернігівська область');
-    expect(response[23].point).toEqual(15);
+    expect(response[23].point).toEqual(25);
   });
 
   it('transformData', async () => {
     const response = await service.transformData(regionsMock());
     expect(response[0].id).toEqual(1);
     expect(response[0].key).toEqual('Вінницька область');
-    expect(response[0].point).toEqual(50);
+    expect(response[0].point).toEqual(80);
 
     expect(response[1].id).toEqual(2);
     expect(response[1].key).toEqual('Волинська область');
@@ -275,7 +275,7 @@ describe('RegionService', () => {
 
     expect(response[4].id).toEqual(5);
     expect(response[4].key).toEqual('Житомирська область');
-    expect(response[4].point).toEqual(40);
+    expect(response[4].point).toEqual(60);
 
     expect(response[5].id).toEqual(6);
     expect(response[5].key).toEqual('Закарпатська область');
@@ -292,11 +292,11 @@ describe('RegionService', () => {
 
     expect(response[8].id).toEqual(9);
     expect(response[8].key).toEqual('Київська область');
-    expect(response[8].point).toEqual(20);
+    expect(response[8].point).toEqual(40);
 
     expect(response[9].id).toEqual(10);
     expect(response[9].key).toEqual('Кіровоградська область');
-    expect(response[9].point).toEqual(15);
+    expect(response[9].point).toEqual(25);
     expect(response[9].enabled).toBeTruthy();
 
     expect(response[10].id).toEqual(11);
@@ -309,15 +309,15 @@ describe('RegionService', () => {
 
     expect(response[12].id).toEqual(13);
     expect(response[12].key).toEqual('Миколаївська область');
-    expect(response[12].point).toEqual(15);
+    expect(response[12].point).toEqual(40);
 
     expect(response[13].id).toEqual(14);
     expect(response[13].key).toEqual('Одеська область');
-    expect(response[13].point).toEqual(20);
+    expect(response[13].point).toEqual(45);
 
     expect(response[14].id).toEqual(15);
     expect(response[14].key).toEqual('Полтавська область');
-    expect(response[14].point).toEqual(10);
+    expect(response[14].point).toEqual(20);
 
     expect(response[15].id).toEqual(16);
     expect(response[15].key).toEqual('Рівненська область');
@@ -339,15 +339,15 @@ describe('RegionService', () => {
 
     expect(response[19].id).toEqual(20);
     expect(response[19].key).toEqual('Херсонська область');
-    expect(response[19].point).toEqual(5);
+    expect(response[19].point).toEqual(15);
 
     expect(response[20].id).toEqual(21);
     expect(response[20].key).toEqual('Хмельницька область');
-    expect(response[20].point).toEqual(65);
+    expect(response[20].point).toEqual(80);
 
     expect(response[21].id).toEqual(22);
     expect(response[21].key).toEqual('Черкаська область');
-    expect(response[21].point).toEqual(15);
+    expect(response[21].point).toEqual(25);
 
     expect(response[22].id).toEqual(23);
     expect(response[22].key).toEqual('Чернівецька область');
@@ -356,6 +356,6 @@ describe('RegionService', () => {
 
     expect(response[23].id).toEqual(24);
     expect(response[23].key).toEqual('Чернігівська область');
-    expect(response[23].point).toEqual(15);
+    expect(response[23].point).toEqual(25);
   });
 });
