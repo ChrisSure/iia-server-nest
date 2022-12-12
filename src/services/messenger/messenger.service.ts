@@ -68,20 +68,9 @@ export class MessengerService {
   }
 
   async getConnectionLink(message: string): Promise<string> {
-    let botToken, channelId;
-    switch (process.env.ENV) {
-      case 'stage':
-        botToken = '5504688883:AAH1yOYmG8fxn_vYD3ZJFQn1LWF75m2NI_Y';
-        channelId = '-1001615018661';
-        break;
-      case 'prod':
-        botToken = '5504688883:AAH1yOYmG8fxn_vYD3ZJFQn1LWF75m2NI_Y';
-        channelId = '-1001615018661';
-        break;
-    }
     return process.env.ENV === 'stage' || process.env.ENV === 'prod'
       ? encodeURI(
-          `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${channelId}&text=${message}`,
+          `https://api.telegram.org/bot5504688883:AAH1yOYmG8fxn_vYD3ZJFQn1LWF75m2NI_Y/sendMessage?chat_id=-1001615018661&text=${message}`,
         )
       : null;
   }

@@ -11,6 +11,8 @@ import { UnitRepository } from '../../repositories/unit/unit.repository';
 import { Alarm } from '../../repositories/alarm/schemas/alarm.schema';
 import { Unit } from '../../repositories/unit/schemas/unit.schema';
 import { MessengerService } from '../messenger/messenger.service';
+import { StatisticService } from '../statistic/statistic.service';
+import { Statistic } from '../statistic/interfaces/statistic.interface';
 
 @Injectable()
 export class TasksService {
@@ -19,6 +21,7 @@ export class TasksService {
   private _pointBehaviourService: PointBehaviourService;
   private _alarmService: AlarmService;
   private _messengerService: MessengerService;
+  private _statisticService: StatisticService;
   private _alarmRepository: AlarmRepository;
   private _unitRepository: UnitRepository;
   currentDate: Date;
@@ -28,6 +31,7 @@ export class TasksService {
     pointBehaviourService: PointBehaviourService,
     alarmService: AlarmService,
     messengerService: MessengerService,
+    statisticService: StatisticService,
     alarmRepository: AlarmRepository,
     unitRepository: UnitRepository,
   ) {
@@ -35,6 +39,7 @@ export class TasksService {
     this._pointBehaviourService = pointBehaviourService;
     this._alarmService = alarmService;
     this._messengerService = messengerService;
+    this._statisticService = statisticService;
     this._alarmRepository = alarmRepository;
     this._unitRepository = unitRepository;
     this.currentDate = new Date();
@@ -44,33 +49,47 @@ export class TasksService {
   async handleCronAlarm(): Promise<number> {
     try {
       const regions: Array<Region> = await this._regionService.getRegions();
-      const biggerPoint: number = await this._regionService.getBiggerPoint(
-        regions,
-      );
-      let result: number = await this._pointBehaviourService.start(
-        biggerPoint,
-        regions,
-        this.currentDate,
-      );
-      const lastAlarm: Alarm = await this._alarmRepository.findLast();
-      const lastUnit: Unit = await this._unitRepository.findLast();
+      if (regions) {
+        const biggerPoint: number = await this._regionService.getBiggerPoint(
+          regions,
+        );
 
-      const isAlarmGone: boolean = await this._alarmService.isAlarmGone(
-        lastAlarm.date,
-      );
-      if (!isAlarmGone && result !== 100) {
-        result = 0;
+        const alarms = await this._alarmRepository.getAll();
+        const statisticReport: Statistic = await this._statisticService.getReport(alarms);
+
+        let result: number = await this._pointBehaviourService.start(
+          biggerPoint,
+          regions,
+          this.currentDate,
+          statisticReport
+        );
+
+        const lastAlarm: Alarm = await this._alarmRepository.findLast();
+        if (lastAlarm) {
+          const isAlarmGone: boolean = await this._alarmService.isAlarmGone(
+            lastAlarm.date,
+          );
+          if (!isAlarmGone && result !== 100) {
+            result = 0;
+          }
+          if (result === 100 && isAlarmGone) {
+            const createAlarmDto: CreateAlarmDto = { date: new Date() };
+            await this._alarmRepository.create(createAlarmDto);
+          }
+        }
+
+        const lastUnit: Unit = await this._unitRepository.findLast();
+        if (lastUnit) {
+          await this._messengerService.telegramNotify(result, lastUnit.point);
+        }
+
+        const createUnitDto: CreateUnitDto = {
+          point: result,
+          date: new Date(),
+        };
+        await this._unitRepository.create(createUnitDto);
+        return result;
       }
-      if (result === 100 && isAlarmGone) {
-        const createAlarmDto: CreateAlarmDto = { date: new Date() };
-        await this._alarmRepository.create(createAlarmDto);
-      }
-
-      await this._messengerService.telegramNotify(result, lastUnit.point);
-
-      const createUnitDto: CreateUnitDto = { point: result, date: new Date() };
-      await this._unitRepository.create(createUnitDto);
-      return result;
     } catch (error) {
       this.logger.error(error);
     }
