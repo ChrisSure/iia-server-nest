@@ -15,7 +15,9 @@ export class UnitRepository {
 
   async findLast(): Promise<Unit> {
     const lastUnit = await this.unitModel.find({}).sort({ _id: -1 }).limit(1);
-    return lastUnit[0];
+    if (lastUnit) {
+      return lastUnit[0];
+    }
   }
 
   async removeAllUnits(): Promise<void> {
