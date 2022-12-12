@@ -24,7 +24,7 @@ export class StatisticService {
     return {firstMaxHour: firstMaxHour.value, secondMaxHour: secondMaxHour.value, maxDay: maxDay.value};
   }
 
-  async getMaxValue(groupedValues): Promise<MaxValue> {
+  async getMaxValue(groupedValues: any): Promise<MaxValue> {
     let value = 0;
     let count = 0;
     groupedValues.forEach((r) => {
@@ -40,7 +40,7 @@ export class StatisticService {
     let value = 0;
     let count = 0;
     groupedHours.forEach((r) => {
-      if (r.length !== firstMaxHour.count && (!value || value < r.length)) {
+      if (r[0] !== firstMaxHour.value && count < r.length) {
         value = r[0];
         count = r.length;
       }
