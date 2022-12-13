@@ -5,12 +5,21 @@ import { Statistic } from '../../statistic/interfaces/statistic.interface';
 
 describe('PointBehaviourService', () => {
   const service: PointBehaviourService = new PointBehaviourService();
-  const statistic: Statistic = { firstMaxHour: 12, secondMaxHour: 8, maxDay: 0 };
+  const statistic: Statistic = {
+    firstMaxHour: 12,
+    secondMaxHour: 8,
+    maxDay: 0,
+  };
 
   it('start', async () => {
     const currentDate: Date = new Date('2022-06-18T13:24:00.397Z');
     const regions: Array<Region> = regionsMock();
-    const response: number = await service.start(50, regions, currentDate, statistic);
+    const response: number = await service.start(
+      50,
+      regions,
+      currentDate,
+      statistic,
+    );
     expect(response).toEqual(50);
   });
 
@@ -20,7 +29,12 @@ describe('PointBehaviourService', () => {
     regions[0].enabled = true;
     regions[12].enabled = true;
     regions[13].enabled = true;
-    const response: number = await service.start(50, regions, currentDate, statistic);
+    const response: number = await service.start(
+      50,
+      regions,
+      currentDate,
+      statistic,
+    );
     expect(response).toEqual(60);
   });
 
@@ -106,7 +120,11 @@ describe('PointBehaviourService', () => {
 
   it('timeBehaviour Monday', async () => {
     const currentDate: Date = new Date('2022-12-19T03:24:00.397Z');
-    const response: number = await service.timeBehaviour(60, currentDate, statistic);
+    const response: number = await service.timeBehaviour(
+      60,
+      currentDate,
+      statistic,
+    );
     expect(response).toEqual(65);
   });
 
@@ -114,25 +132,42 @@ describe('PointBehaviourService', () => {
     const currentDate: Date = new Date('2022-06-19T08:00:00.397Z');
     const regions: Array<Region> = regionsMock();
     regions[0].enabled = true;
-    const response: number = await service.start(50, regions, currentDate, statistic);
+    const response: number = await service.start(
+      50,
+      regions,
+      currentDate,
+      statistic,
+    );
     expect(response).toEqual(55);
   });
 
   it('timeBehaviour 12 hour', async () => {
     const currentDate: Date = new Date('2022-06-19T12:01:01.397Z');
-    const response: number = await service.timeBehaviour(60, currentDate, statistic);
+    const response: number = await service.timeBehaviour(
+      60,
+      currentDate,
+      statistic,
+    );
     expect(response).toEqual(65);
   });
 
   it('timeBehaviour more than 80', async () => {
     const currentDate: Date = new Date('2022-06-19T14:24:00');
-    const response: number = await service.timeBehaviour(85, currentDate, statistic);
+    const response: number = await service.timeBehaviour(
+      85,
+      currentDate,
+      statistic,
+    );
     expect(response).toEqual(85);
   });
 
   it('timeBehaviour not changed', async () => {
     const currentDate: Date = new Date('2022-06-19T13:24:00');
-    const response: number = await service.timeBehaviour(50, currentDate, statistic);
+    const response: number = await service.timeBehaviour(
+      50,
+      currentDate,
+      statistic,
+    );
     expect(response).toEqual(50);
   });
 });
