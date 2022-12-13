@@ -1,4 +1,4 @@
 export interface MaxValue {
-    value: number;
-    count: number;
+  value: number;
+  count: number;
 }
