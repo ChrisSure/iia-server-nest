@@ -55,7 +55,11 @@ describe('TasksService', () => {
 
   it('handleCronAlarm', async () => {
     const getReportPromise = new Promise((resolve) => {
-      const statistic: Statistic = { firstMaxHour: 12, secondMaxHour: 8, maxDay: 0 };
+      const statistic: Statistic = {
+        firstMaxHour: 12,
+        secondMaxHour: 8,
+        maxDay: 0,
+      };
       resolve(statistic);
     });
     const getRegionsPromise = new Promise((resolve) => {
@@ -131,7 +135,11 @@ describe('TasksService', () => {
 
   it('handleCronAlarm is alarm not gone', async () => {
     const getReportPromise = new Promise((resolve) => {
-      const statistic: Statistic = { firstMaxHour: 12, secondMaxHour: 8, maxDay: 0 };
+      const statistic: Statistic = {
+        firstMaxHour: 12,
+        secondMaxHour: 8,
+        maxDay: 0,
+      };
       resolve(statistic);
     });
     const getRegionsPromise = new Promise((resolve) => {
@@ -185,6 +193,9 @@ describe('TasksService', () => {
       .spyOn(alarmRepository, 'getAll')
       .mockImplementation(() => getAllAlarmsPromise.then());
     jest
+      .spyOn(statisticService, 'getReport')
+      .mockImplementation(() => getReportPromise.then());
+    jest
       .spyOn(regionService, 'getRegions')
       .mockImplementation(() => getRegionsPromise.then());
     jest
@@ -207,7 +218,11 @@ describe('TasksService', () => {
 
   it('handleCronAlarm is alarm not gone bur result 100', async () => {
     const getReportPromise = new Promise((resolve) => {
-      const statistic: Statistic = { firstMaxHour: 12, secondMaxHour: 8, maxDay: 0 };
+      const statistic: Statistic = {
+        firstMaxHour: 12,
+        secondMaxHour: 8,
+        maxDay: 0,
+      };
       resolve(statistic);
     });
     const getRegionsPromise = new Promise((resolve) => {

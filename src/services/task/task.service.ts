@@ -55,13 +55,14 @@ export class TasksService {
         );
 
         const alarms = await this._alarmRepository.getAll();
-        const statisticReport: Statistic = await this._statisticService.getReport(alarms);
+        const statisticReport: Statistic =
+          await this._statisticService.getReport(alarms);
 
         let result: number = await this._pointBehaviourService.start(
           biggerPoint,
           regions,
           this.currentDate,
-          statisticReport
+          statisticReport,
         );
 
         const lastAlarm: Alarm = await this._alarmRepository.findLast();

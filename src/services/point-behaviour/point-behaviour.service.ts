@@ -10,11 +10,15 @@ export class PointBehaviourService {
     biggerPoint: number,
     regions: Array<Region>,
     currentDate: Date,
-    statisticReport: Statistic
+    statisticReport: Statistic,
   ): Promise<number> {
     this.activeRegions = await this.setActiveRegions(regions);
     biggerPoint = await this.towardsBehaviour(biggerPoint);
-    biggerPoint = await this.timeBehaviour(biggerPoint, currentDate, statisticReport);
+    biggerPoint = await this.timeBehaviour(
+      biggerPoint,
+      currentDate,
+      statisticReport,
+    );
     return biggerPoint;
   }
 
@@ -41,17 +45,24 @@ export class PointBehaviourService {
     return newPoint;
   }
 
-  async timeBehaviour(biggerPoint: number, currentDate: Date, statisticReport: Statistic): Promise<number> {
+  async timeBehaviour(
+    biggerPoint: number,
+    currentDate: Date,
+    statisticReport: Statistic,
+  ): Promise<number> {
     let newPoint = biggerPoint;
     const hour = currentDate.getUTCHours();
     const day = currentDate.getUTCDay();
 
     if (newPoint < 80 && newPoint > 4) {
-      if (day === (statisticReport.maxDay) + 1) {
+      if (day === statisticReport.maxDay + 1) {
         newPoint = newPoint + 5;
       }
 
-      if (hour === statisticReport.firstMaxHour || hour === statisticReport.secondMaxHour) {
+      if (
+        hour === statisticReport.firstMaxHour ||
+        hour === statisticReport.secondMaxHour
+      ) {
         newPoint = newPoint + 5;
       }
     }

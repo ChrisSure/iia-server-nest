@@ -16,12 +16,19 @@ export class StatisticService {
     });
     const groupedHours: any = await this.groupValues(hoursData);
     const firstMaxHour: MaxValue = await this.getMaxValue(groupedHours);
-    const secondMaxHour: MaxValue = await this.getSecondMaxHour(groupedHours, firstMaxHour);
+    const secondMaxHour: MaxValue = await this.getSecondMaxHour(
+      groupedHours,
+      firstMaxHour,
+    );
 
     const groupedDays: any = await this.groupValues(daysData);
     const maxDay: MaxValue = await this.getMaxValue(groupedDays);
 
-    return {firstMaxHour: firstMaxHour.value, secondMaxHour: secondMaxHour.value, maxDay: maxDay.value};
+    return {
+      firstMaxHour: firstMaxHour.value,
+      secondMaxHour: secondMaxHour.value,
+      maxDay: maxDay.value,
+    };
   }
 
   async getMaxValue(groupedValues: any): Promise<MaxValue> {
@@ -36,7 +43,10 @@ export class StatisticService {
     return { value, count };
   }
 
-  async getSecondMaxHour(groupedHours: any, firstMaxHour: MaxValue): Promise<MaxValue> {
+  async getSecondMaxHour(
+    groupedHours: any,
+    firstMaxHour: MaxValue,
+  ): Promise<MaxValue> {
     let value = 0;
     let count = 0;
     groupedHours.forEach((r) => {
