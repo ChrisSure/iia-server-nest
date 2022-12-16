@@ -52,10 +52,10 @@ export class RegionService {
   async getRegionsLibrary(): Promise<Array<RegionBase>> {
     return [
       { id: 1, name: 'Вінницька область', point: 80 },
-      { id: 2, name: 'Волинська область', point: 80 },
+      { id: 2, name: 'Волинська область', point: 85 },
       { id: 3, name: 'Дніпропетровська область', point: 10 },
       { id: 4, name: 'Донецька область', point: 0 },
-      { id: 5, name: 'Житомирська область', point: 60 },
+      { id: 5, name: 'Житомирська область', point: 80 },
       { id: 6, name: 'Закарпатська область', point: 90 },
       { id: 7, name: 'Запорізька область', point: 5 },
       { id: 8, name: 'Івано-Франківська область', point: 100 },
@@ -66,7 +66,7 @@ export class RegionService {
       { id: 13, name: 'Миколаївська область', point: 40 },
       { id: 14, name: 'Одеська область', point: 45 },
       { id: 15, name: 'Полтавська область', point: 20 },
-      { id: 16, name: 'Рівненська область', point: 60 },
+      { id: 16, name: 'Рівненська область', point: 80 },
       { id: 17, name: 'Сумська область', point: 5 },
       { id: 18, name: 'Тернопільська область', point: 90 },
       { id: 19, name: 'Харківська область', point: 5 },

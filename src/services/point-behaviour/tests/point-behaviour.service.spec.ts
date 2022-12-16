@@ -23,21 +23,6 @@ describe('PointBehaviourService', () => {
     expect(response).toEqual(50);
   });
 
-  it('start -> towardsBehaviour 50->60', async () => {
-    const currentDate: Date = new Date('2022-06-18T14:24:00.397Z');
-    const regions: Array<Region> = regionsMock();
-    regions[0].enabled = true;
-    regions[12].enabled = true;
-    regions[13].enabled = true;
-    const response: number = await service.start(
-      50,
-      regions,
-      currentDate,
-      statistic,
-    );
-    expect(response).toEqual(60);
-  });
-
   it('setActiveRegions', async () => {
     const regions: Array<Region> = regionsMock();
     regions[5].enabled = true;
@@ -76,42 +61,28 @@ describe('PointBehaviourService', () => {
     expect(response).not.toBeTruthy();
   });
 
-  it('towardsBehaviour 50->60 true', async () => {
+  it('towardsBehaviour 40->50 true', async () => {
     const regions: Array<Region> = regionsMock();
-    service.activeRegions = [regions[0], regions[12], regions[13]];
-    const response: number = await service.towardsBehaviour(50);
-    expect(response).toEqual(60);
-  });
-
-  it('towardsBehaviour 50->60 false', async () => {
-    const regions: Array<Region> = regionsMock();
-    service.activeRegions = [regions[0], regions[12], regions[4]];
-    const response: number = await service.towardsBehaviour(50);
+    service.activeRegions = [regions[8], regions[9], regions[14], regions[21]];
+    const response: number = await service.towardsBehaviour(40);
     expect(response).toEqual(50);
   });
 
-  it('towardsBehaviour 65->75 true', async () => {
+  it('towardsBehaviour 40->50 false', async () => {
     const regions: Array<Region> = regionsMock();
-    service.activeRegions = [regions[0], regions[12], regions[13], regions[20]];
-    const response: number = await service.towardsBehaviour(65);
-    expect(response).toEqual(75);
+    service.activeRegions = [regions[0], regions[12], regions[4]];
+    const response: number = await service.towardsBehaviour(40);
+    expect(response).toEqual(40);
   });
 
-  it('towardsBehaviour 65->75 false', async () => {
+  it('towardsBehaviour 80->85 true', async () => {
     const regions: Array<Region> = regionsMock();
-    service.activeRegions = [regions[0], regions[6], regions[4]];
-    const response: number = await service.towardsBehaviour(65);
-    expect(response).toEqual(65);
-  });
-
-  it('towardsBehaviour 80->75 true', async () => {
-    const regions: Array<Region> = regionsMock();
-    service.activeRegions = [regions[1], regions[4], regions[15]];
+    service.activeRegions = [regions[0], regions[12], regions[13]];
     const response: number = await service.towardsBehaviour(80);
-    expect(response).toEqual(75);
+    expect(response).toEqual(85);
   });
 
-  it('towardsBehaviour 80->75 false', async () => {
+  it('towardsBehaviour 80->85 false', async () => {
     const regions: Array<Region> = regionsMock();
     service.activeRegions = [regions[1], regions[4]];
     const response: number = await service.towardsBehaviour(80);
