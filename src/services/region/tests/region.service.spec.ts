@@ -58,7 +58,7 @@ describe('RegionService', () => {
 
     expect(response[1].id).toEqual(2);
     expect(response[1].key).toEqual('Волинська область');
-    expect(response[1].point).toEqual(80);
+    expect(response[1].point).toEqual(85);
 
     expect(response[2].id).toEqual(3);
     expect(response[2].key).toEqual('Дніпропетровська область');
@@ -71,7 +71,7 @@ describe('RegionService', () => {
 
     expect(response[4].id).toEqual(5);
     expect(response[4].key).toEqual('Житомирська область');
-    expect(response[4].point).toEqual(60);
+    expect(response[4].point).toEqual(80);
 
     expect(response[5].id).toEqual(6);
     expect(response[5].key).toEqual('Закарпатська область');
@@ -117,7 +117,7 @@ describe('RegionService', () => {
 
     expect(response[15].id).toEqual(16);
     expect(response[15].key).toEqual('Рівненська область');
-    expect(response[15].point).toEqual(60);
+    expect(response[15].point).toEqual(80);
 
     expect(response[16].id).toEqual(17);
     expect(response[16].key).toEqual('Сумська область');
@@ -163,7 +163,7 @@ describe('RegionService', () => {
 
     expect(response[1].id).toEqual(2);
     expect(response[1].name).toEqual('Волинська область');
-    expect(response[1].point).toEqual(80);
+    expect(response[1].point).toEqual(85);
 
     expect(response[2].id).toEqual(3);
     expect(response[2].name).toEqual('Дніпропетровська область');
@@ -175,7 +175,7 @@ describe('RegionService', () => {
 
     expect(response[4].id).toEqual(5);
     expect(response[4].name).toEqual('Житомирська область');
-    expect(response[4].point).toEqual(60);
+    expect(response[4].point).toEqual(80);
 
     expect(response[5].id).toEqual(6);
     expect(response[5].name).toEqual('Закарпатська область');
@@ -219,7 +219,7 @@ describe('RegionService', () => {
 
     expect(response[15].id).toEqual(16);
     expect(response[15].name).toEqual('Рівненська область');
-    expect(response[15].point).toEqual(60);
+    expect(response[15].point).toEqual(80);
 
     expect(response[16].id).toEqual(17);
     expect(response[16].name).toEqual('Сумська область');
@@ -262,7 +262,7 @@ describe('RegionService', () => {
 
     expect(response[1].id).toEqual(2);
     expect(response[1].key).toEqual('Волинська область');
-    expect(response[1].point).toEqual(80);
+    expect(response[1].point).toEqual(85);
 
     expect(response[2].id).toEqual(3);
     expect(response[2].key).toEqual('Дніпропетровська область');
@@ -275,7 +275,7 @@ describe('RegionService', () => {
 
     expect(response[4].id).toEqual(5);
     expect(response[4].key).toEqual('Житомирська область');
-    expect(response[4].point).toEqual(60);
+    expect(response[4].point).toEqual(80);
 
     expect(response[5].id).toEqual(6);
     expect(response[5].key).toEqual('Закарпатська область');
@@ -321,7 +321,7 @@ describe('RegionService', () => {
 
     expect(response[15].id).toEqual(16);
     expect(response[15].key).toEqual('Рівненська область');
-    expect(response[15].point).toEqual(60);
+    expect(response[15].point).toEqual(80);
 
     expect(response[16].id).toEqual(17);
     expect(response[16].key).toEqual('Сумська область');
