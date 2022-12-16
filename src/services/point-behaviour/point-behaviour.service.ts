@@ -26,20 +26,15 @@ export class PointBehaviourService {
     const regionsKeys = await this.getRegionsKeys();
     let newPoint = biggerPoint;
     switch (biggerPoint) {
-      case 50:
-        newPoint = (await this.regionValueExist([13, 14, 1], regionsKeys))
-          ? 60
-          : 50;
-        break;
-      case 65:
-        newPoint = (await this.regionValueExist([13, 14, 1, 21], regionsKeys))
-          ? 75
-          : 65;
-        break;
       case 80:
-        newPoint = (await this.regionValueExist([2, 5, 16], regionsKeys))
-          ? 75
+        newPoint = (await this.regionValueExist([1, 13, 14], regionsKeys))
+          ? 85
           : 80;
+        break;
+      case 40:
+        newPoint = (await this.regionValueExist([9, 10, 15, 22], regionsKeys))
+          ? 50
+          : 40;
         break;
     }
     return newPoint;
