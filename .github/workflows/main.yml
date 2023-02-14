@@ -21,3 +21,8 @@ jobs:
       - run: npm run build --if-present
       - run: npm run lint
       - run: npm run test:ci
+      - name: Check test coverage
+        uses: terencetcf/github-actions-lcov-minimum-coverage-checker@v1
+        with:
+          coverage-file: coverage/lcov.info
+          minimum-coverage: 90
