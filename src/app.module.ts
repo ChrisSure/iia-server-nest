@@ -17,7 +17,7 @@ import { StatisticService } from './services/statistic/statistic.service';
   imports: [
     ScheduleModule.forRoot(),
     MongooseModule.forRoot(
-      'mongodb+srv://Mbappe9119:AXmgL5D6hdATYtM@ifairalarmdev.19uvw.mongodb.net/?retryWrites=true&w=majority',
+      'mongodb+srv://Mbappe9119:qFl5UtXTlXoRBa92@ifairalarmdev.19uvw.mongodb.net/?retryWrites=true&w=majority',
     ),
     MongooseModule.forFeature([
       { name: Alarm.name, schema: AlarmSchema },
