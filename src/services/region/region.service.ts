@@ -7,7 +7,7 @@ import { Region } from './interfaces/region.interface';
 export class RegionService {
   async getRegions(): Promise<Array<Region>> {
     return axios
-      .get('https://emapa.fra1.cdn.digitaloceanspaces.com/statuses.json')
+      .get('https://vadimklimenko.com/map/statuses.json')
       .then(async (response) => {
         return await this.transformData(response.data.states);
       })
