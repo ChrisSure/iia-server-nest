@@ -48,16 +48,22 @@ export class TasksService {
   @Cron(CronExpression.EVERY_30_SECONDS)
   async handleCronAlarm(): Promise<number> {
     try {
+      // Get Regions list
       const regions: Array<Region> = await this._regionService.getRegions();
       if (regions) {
+        // Get bigger point from regions list
         const biggerPoint: number = await this._regionService.getBiggerPoint(
           regions,
         );
 
+        // Get All alarms
         const alarms = await this._alarmRepository.getAll();
+
+        // Get Statistic report
         const statisticReport: Statistic =
           await this._statisticService.getReport(alarms);
 
+        // Get result based on different point behaviours
         let result: number = await this._pointBehaviourService.start(
           biggerPoint,
           regions,
@@ -65,25 +71,38 @@ export class TasksService {
           statisticReport,
         );
 
+        // Get last alarm
         const lastAlarm: Alarm = await this._alarmRepository.findLast();
+
         if (lastAlarm) {
+          // Check if alarm gone
           const isAlarmGone: boolean = await this._alarmService.isAlarmGone(
             lastAlarm.date,
           );
+          // Check if alarm gone and result in not 100 then decrease it to 0 to not notify users
           if (!isAlarmGone && result !== 100) {
             result = 0;
           }
+          // Create alarm
           if (result === 100 && isAlarmGone) {
             const createAlarmDto: CreateAlarmDto = { date: new Date() };
             await this._alarmRepository.create(createAlarmDto);
           }
         }
 
+        // Get last unit
         const lastUnit: Unit = await this._unitRepository.findLast();
+
+        // Send notification via Telegram
         if (lastUnit) {
-          await this._messengerService.telegramNotify(result, lastUnit.point);
+          await this._messengerService.telegramNotify(
+            result,
+            lastUnit.point,
+            lastUnit,
+          );
         }
 
+        // Create Unit
         const createUnitDto: CreateUnitDto = {
           point: result,
           date: new Date(),

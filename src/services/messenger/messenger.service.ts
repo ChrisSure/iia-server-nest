@@ -1,10 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { Unit } from '../../repositories/unit/interface/unit.interface';
 
 @Injectable()
 export class MessengerService {
-  async telegramNotify(result: number, lastResult: number): Promise<void> {
-    const level = await this.getNotificationLevel(result, lastResult);
+  async telegramNotify(
+    result: number,
+    lastResult: number,
+    lastUnit: Unit,
+  ): Promise<void> {
+    const isFastResult = await this.isFastAlarm(
+      result,
+      lastResult,
+      lastUnit,
+      Date.now(),
+    );
+    const level = await this.getNotificationLevel(
+      result,
+      lastResult,
+      isFastResult,
+    );
     if (result !== lastResult && level !== '') {
       const message = await this.generateMessage(level, result);
       const link = await this.getConnectionLink(message);
@@ -19,9 +34,25 @@ export class MessengerService {
     }
   }
 
+  async isFastAlarm(
+    result: number,
+    lastResult: number,
+    lastUnit: Unit,
+    currentTime: number,
+  ): Promise<boolean> {
+    const lastResultTime = new Date(lastUnit.date).getTime() - 30;
+    return (
+      result === 100 &&
+      lastResult > 80 &&
+      lastResult !== result &&
+      currentTime - lastResultTime < 120000
+    );
+  }
+
   async getNotificationLevel(
     result: number,
     lastResult: number,
+    isFastResult: boolean,
   ): Promise<string> {
     if (result < 40 && lastResult >= 40 && lastResult !== 100) {
       return 'low';
@@ -39,8 +70,12 @@ export class MessengerService {
       return 'rebound';
     }
 
-    if (result === 100 && lastResult !== 100) {
+    if (result === 100 && lastResult !== 100 && !isFastResult) {
       return 'alarm';
+    }
+
+    if (result === 100 && lastResult !== 100 && isFastResult) {
+      return 'alarm-fast';
     }
     return '';
   }
@@ -62,6 +97,10 @@ export class MessengerService {
         break;
       case 'alarm':
         message = '🙏 Увага Оголошена Повітряна Тривога 🙏';
+        break;
+      case 'alarm-fast':
+        message =
+          '🛫 Повітряна тривога спровокована злетом носія ракети кинжал, ризики для Івано-Франківська мінімальні 🛫';
         break;
     }
     return message;
