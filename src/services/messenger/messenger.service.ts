@@ -7,14 +7,9 @@ export class MessengerService {
   async telegramNotify(
     result: number,
     lastResult: number,
-    lastUnit: Unit,
+    lastUnitRecent: Unit,
   ): Promise<void> {
-    const isFastResult = await this.isFastAlarm(
-      result,
-      lastResult,
-      lastUnit,
-      Date.now(),
-    );
+    const isFastResult = await this.isFastAlarm(result, lastUnitRecent);
     const level = await this.getNotificationLevel(
       result,
       lastResult,
@@ -34,19 +29,8 @@ export class MessengerService {
     }
   }
 
-  async isFastAlarm(
-    result: number,
-    lastResult: number,
-    lastUnit: Unit,
-    currentTime: number,
-  ): Promise<boolean> {
-    const lastResultTime = new Date(lastUnit.date).getTime() - 30;
-    return (
-      result === 100 &&
-      lastResult > 80 &&
-      lastResult !== result &&
-      currentTime - lastResultTime < 120000
-    );
+  async isFastAlarm(result: number, lastUnit: Unit): Promise<boolean> {
+    return result === 100 && lastUnit.point < 40;
   }
 
   async getNotificationLevel(
