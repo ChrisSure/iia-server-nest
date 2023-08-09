@@ -97,6 +97,11 @@ describe('TasksService', () => {
       resolve(unit);
     });
 
+    const lastUnitRecentPromise = new Promise((resolve) => {
+      const unit: Unit = { point: 50, date: new Date() };
+      resolve(unit);
+    });
+
     jest
       .spyOn(regionService, 'getBiggerPoint')
       .mockImplementation(() => getBiggerPointPromise.then());
@@ -128,6 +133,9 @@ describe('TasksService', () => {
     jest
       .spyOn(unitRepository, 'create')
       .mockImplementation(() => createUnitPromise.then());
+    jest
+      .spyOn(unitRepository, 'findLastFromRecent')
+      .mockImplementation(() => lastUnitRecentPromise.then());
 
     const response: number = await tasksService.handleCronAlarm();
     expect(response).toEqual(90);
@@ -177,6 +185,11 @@ describe('TasksService', () => {
       resolve(unit);
     });
 
+    const lastUnitRecentPromise = new Promise((resolve) => {
+      const unit: Unit = { point: 50, date: new Date() };
+      resolve(unit);
+    });
+
     jest
       .spyOn(regionService, 'getRegions')
       .mockImplementation(() => getRegionsPromise.then());
@@ -211,6 +224,9 @@ describe('TasksService', () => {
     jest
       .spyOn(unitRepository, 'create')
       .mockImplementation(() => createUnitPromise.then());
+    jest
+      .spyOn(unitRepository, 'findLastFromRecent')
+      .mockImplementation(() => lastUnitRecentPromise.then());
 
     const response: number = await tasksService.handleCronAlarm();
     expect(response).toEqual(0);
@@ -260,6 +276,11 @@ describe('TasksService', () => {
       resolve(unit);
     });
 
+    const lastUnitRecentPromise = new Promise((resolve) => {
+      const unit: Unit = { point: 50, date: new Date() };
+      resolve(unit);
+    });
+
     jest
       .spyOn(regionService, 'getRegions')
       .mockImplementation(() => getRegionsPromise.then());
@@ -291,6 +312,9 @@ describe('TasksService', () => {
     jest
       .spyOn(unitRepository, 'create')
       .mockImplementation(() => createUnitPromise.then());
+    jest
+      .spyOn(unitRepository, 'findLastFromRecent')
+      .mockImplementation(() => lastUnitRecentPromise.then());
 
     const response: number = await tasksService.handleCronAlarm();
     expect(response).toEqual(100);

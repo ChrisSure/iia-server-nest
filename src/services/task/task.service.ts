@@ -92,13 +92,15 @@ export class TasksService {
 
         // Get last unit
         const lastUnit: Unit = await this._unitRepository.findLast();
+        const lastUnitRecent: Unit =
+          await this._unitRepository.findLastFromRecent();
 
         // Send notification via Telegram
         if (lastUnit) {
           await this._messengerService.telegramNotify(
             result,
             lastUnit.point,
-            lastUnit,
+            lastUnitRecent,
           );
         }
 
