@@ -91,44 +91,21 @@ describe('MessengerService', () => {
 
   it('isFastAlarm false', async () => {
     const result = 50;
-    const lastResult = 30;
-    const currentDate = Date.now();
-    const response: boolean = await service.isFastAlarm(
-      result,
-      lastResult,
-      unitMockObj,
-      currentDate,
-    );
+    const response: boolean = await service.isFastAlarm(result, unitMockObj);
     expect(response).toEqual(false);
   });
 
-  it('isFastAlarm false date bigger', async () => {
-    const result = 50;
-    const lastResult = 30;
-    const currentDate = Date.now();
-    const unitMockNew = unitMockObj;
-    unitMockNew.date = new Date(Date.now() - 130000);
-    const response: boolean = await service.isFastAlarm(
-      result,
-      lastResult,
-      unitMockNew,
-      currentDate,
-    );
+  it('isFastAlarm false point bigger', async () => {
+    const result = 100;
+    const response: boolean = await service.isFastAlarm(result, unitMockObj);
     expect(response).toEqual(false);
   });
 
   it('isFastAlarm true', async () => {
-    const result = 50;
-    const lastResult = 30;
-    const currentDate = Date.now();
+    const result = 100;
     const unitMockNew = unitMockObj;
-    unitMockNew.date = new Date(Date.now() - 90000);
-    const response: boolean = await service.isFastAlarm(
-      result,
-      lastResult,
-      unitMockNew,
-      currentDate,
-    );
-    expect(response).toEqual(false);
+    unitMockNew.point = 20;
+    const response: boolean = await service.isFastAlarm(result, unitMockNew);
+    expect(response).toEqual(true);
   });
 });

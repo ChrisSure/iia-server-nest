@@ -20,6 +20,15 @@ export class UnitRepository {
     }
   }
 
+  async findLastFromRecent(): Promise<Unit | null> {
+    const lastFive = await this.unitModel
+      .find()
+      .sort({ _id: -1 })
+      .limit(5)
+      .exec();
+    return lastFive.length > 0 ? lastFive[lastFive.length - 1] : null;
+  }
+
   async removeAllUnits(): Promise<void> {
     const currentTime = new Date().getTime() - 300000;
     await this.unitModel.deleteMany({ date: { $lt: currentTime } });
