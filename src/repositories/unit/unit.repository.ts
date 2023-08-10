@@ -24,7 +24,7 @@ export class UnitRepository {
     const lastFive = await this.unitModel
       .find()
       .sort({ _id: -1 })
-      .limit(5)
+      .limit(15)
       .exec();
     return lastFive.length > 0 ? lastFive[lastFive.length - 1] : null;
   }
