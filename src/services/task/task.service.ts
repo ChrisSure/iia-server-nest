@@ -45,7 +45,7 @@ export class TasksService {
     this.currentDate = new Date();
   }
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async handleCronAlarm(): Promise<number> {
     try {
       // Get Regions list
