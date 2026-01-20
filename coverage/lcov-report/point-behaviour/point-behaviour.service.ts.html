@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>35/35</span>
+                <span class='fraction'>37/37</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/32</span>
+                <span class='fraction'>34/34</span>
             </div>
         
             
@@ -154,7 +154,44 @@
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,11 +223,17 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
@@ -206,6 +249,9 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -248,6 +294,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable } from '@nestjs/common';
 import { Region } from '../region/interfaces/region.interface';
 import { Statistic } from '../statistic/interfaces/statistic.interface';
+import {
+  POINT_THRESHOLD_HIGH,
+  POINT_ADJUSTED_HIGH,
+  POINT_THRESHOLD_MEDIUM,
+  POINT_ADJUSTED_MEDIUM,
+  POINT_TIME_ADJUSTMENT_MAX_THRESHOLD,
+  POINT_TIME_ADJUSTMENT_MIN_THRESHOLD,
+  POINT_INCREMENT,
+  STATISTICAL_DAY_OFFSET,
+} from './constants/point-thresholds';
+import {
+  CRITICAL_HIGH_THREAT_REGIONS,
+  KEY_MEDIUM_THREAT_REGIONS,
+} from './constants/region-groups';
 &nbsp;
 @Injectable()
 export class PointBehaviourService {
@@ -273,15 +333,21 @@ export class PointBehaviourService {
     const regionsKeys = await this.getRegionsKeys();
     let newPoint = biggerPoint;
     switch (biggerPoint) {
-      case 80:
-        newPoint = (await this.regionValueExist([1, 13, 14], regionsKeys))
-          ? 85
-          : 80;
+      case POINT_THRESHOLD_HIGH:
+        newPoint = (await this.regionValueExist(
+          CRITICAL_HIGH_THREAT_REGIONS,
+          regionsKeys,
+        ))
+          ? POINT_ADJUSTED_HIGH
+          : POINT_THRESHOLD_HIGH;
         break;
-      case 40:
-        newPoint = (await this.regionValueExist([9, 10, 15, 22], regionsKeys))
-          ? 50
-          : 40;
+      case POINT_THRESHOLD_MEDIUM:
+        newPoint = (await this.regionValueExist(
+          KEY_MEDIUM_THREAT_REGIONS,
+          regionsKeys,
+        ))
+          ? POINT_ADJUSTED_MEDIUM
+          : POINT_THRESHOLD_MEDIUM;
         break;
     }
     return newPoint;
@@ -296,16 +362,19 @@ export class PointBehaviourService {
     const hour = currentDate.getUTCHours();
     const day = currentDate.getUTCDay();
 &nbsp;
-    if (newPoint &lt; 80 &amp;&amp; newPoint &gt; 4) {
-      if (day === statisticReport.maxDay + 1) {
-        newPoint = newPoint + 5;
+    if (
+      newPoint &lt; POINT_TIME_ADJUSTMENT_MAX_THRESHOLD &amp;&amp;
+      newPoint &gt; POINT_TIME_ADJUSTMENT_MIN_THRESHOLD
+    ) {
+      if (day === statisticReport.maxDay + STATISTICAL_DAY_OFFSET) {
+        newPoint = newPoint + POINT_INCREMENT;
       }
 &nbsp;
       if (
         hour === statisticReport.firstMaxHour ||
         hour === statisticReport.secondMaxHour
       ) {
-        newPoint = newPoint + 5;
+        newPoint = newPoint + POINT_INCREMENT;
       }
     }
 &nbsp;
@@ -343,7 +412,7 @@ export class PointBehaviourService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-02-09T16:36:48.383Z
+                at 2026-01-20T09:00:24.362Z
             </div>
         <script src="../prettify.js"></script>
         <script>

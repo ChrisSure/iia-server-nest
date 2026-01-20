@@ -13,6 +13,10 @@ import { Unit } from '../../repositories/unit/schemas/unit.schema';
 import { MessengerService } from '../messenger/messenger.service';
 import { StatisticService } from '../statistic/statistic.service';
 import { Statistic } from '../statistic/interfaces/statistic.interface';
+import {
+  ALARM_STATE_ACTIVE,
+  ALARM_STATE_RESET,
+} from './constants/alarm-states';
 
 @Injectable()
 export class TasksService {
@@ -79,12 +83,12 @@ export class TasksService {
           const isAlarmGone: boolean = await this._alarmService.isAlarmGone(
             lastAlarm.date,
           );
-          // Check if alarm gone and result in not 100 then decrease it to 0 to not notify users
-          if (!isAlarmGone && result !== 100) {
-            result = 0;
+          // Check if alarm gone and result in not max alarm state then reset it to not notify users
+          if (!isAlarmGone && result !== ALARM_STATE_ACTIVE) {
+            result = ALARM_STATE_RESET;
           }
           // Create alarm
-          if (result === 100 && isAlarmGone) {
+          if (result === ALARM_STATE_ACTIVE && isAlarmGone) {
             const createAlarmDto: CreateAlarmDto = { date: new Date() };
             await this._alarmRepository.create(createAlarmDto);
           }

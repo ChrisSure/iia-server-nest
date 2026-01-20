@@ -1,4 +1,5 @@
 import { MessengerService } from '../messenger.service';
+import { NotificationLevel } from '../enums/notification-level.enum';
 import { unitMock } from './mock/unit.mock';
 
 describe('MessengerService', () => {
@@ -6,72 +7,87 @@ describe('MessengerService', () => {
   const unitMockObj = unitMock();
   it('getNotificationLevel low', async () => {
     const response: string = await service.getNotificationLevel(20, 50, false);
-    expect(response).toEqual('low');
+    expect(response).toEqual(NotificationLevel.LOW);
   });
   it('getNotificationLevel average', async () => {
     const response: string = await service.getNotificationLevel(60, 20, false);
-    expect(response).toEqual('average');
+    expect(response).toEqual(NotificationLevel.AVERAGE);
   });
   it('getNotificationLevel high', async () => {
     const response: string = await service.getNotificationLevel(90, 60, false);
-    expect(response).toEqual('high');
+    expect(response).toEqual(NotificationLevel.HIGH);
   });
   it('getNotificationLevel rebound', async () => {
     const response: string = await service.getNotificationLevel(90, 100, false);
-    expect(response).toEqual('rebound');
+    expect(response).toEqual(NotificationLevel.REBOUND);
   });
   it('getNotificationLevel alarm', async () => {
     const response: string = await service.getNotificationLevel(100, 50, false);
-    expect(response).toEqual('alarm');
+    expect(response).toEqual(NotificationLevel.ALARM);
   });
   it('getNotificationLevel empty', async () => {
     const response: string = await service.getNotificationLevel(20, 30, false);
-    expect(response).toEqual('');
+    expect(response).toEqual(NotificationLevel.NONE);
   });
   it('getNotificationLevel alarm without fast alarm option', async () => {
     const response: string = await service.getNotificationLevel(100, 30, false);
-    expect(response).toEqual('alarm');
+    expect(response).toEqual(NotificationLevel.ALARM);
   });
   it('getNotificationLevel alarm with fast alarm option', async () => {
     const response: string = await service.getNotificationLevel(100, 30, true);
-    expect(response).toEqual('alarm-fast');
+    expect(response).toEqual(NotificationLevel.ALARM_FAST);
   });
 
   it('generateMessage low', async () => {
     const result = 50;
-    const response: string = await service.generateMessage('low', result);
+    const response: string = await service.generateMessage(
+      NotificationLevel.LOW,
+      result,
+    );
     expect(response).toEqual(
       `Імовірність Повітряної Тривоги - НИЗЬКА(${result}%)`,
     );
   });
   it('generateMessage average', async () => {
     const result = 50;
-    const response: string = await service.generateMessage('average', result);
+    const response: string = await service.generateMessage(
+      NotificationLevel.AVERAGE,
+      result,
+    );
     expect(response).toEqual(
       `Імовірність Повітряної Тривоги - СЕРЕДНЯ(${result}%)`,
     );
   });
   it('generateMessage high', async () => {
     const result = 50;
-    const response: string = await service.generateMessage('high', result);
+    const response: string = await service.generateMessage(
+      NotificationLevel.HIGH,
+      result,
+    );
     expect(response).toEqual(
       `Імовірність Повітряної Тривоги - ВИСОКА(${result}%)`,
     );
   });
   it('generateMessage rebound', async () => {
     const result = 50;
-    const response: string = await service.generateMessage('rebound', result);
+    const response: string = await service.generateMessage(
+      NotificationLevel.REBOUND,
+      result,
+    );
     expect(response).toEqual('🇺🇦 Відбій повітряної тривоги 🇺🇦');
   });
   it('generateMessage alarm', async () => {
     const result = 50;
-    const response: string = await service.generateMessage('alarm', result);
+    const response: string = await service.generateMessage(
+      NotificationLevel.ALARM,
+      result,
+    );
     expect(response).toEqual('🙏 Увага Оголошена Повітряна Тривога 🙏');
   });
   it('generateMessage alarm-fast', async () => {
     const result = 50;
     const response: string = await service.generateMessage(
-      'alarm-fast',
+      NotificationLevel.ALARM_FAST,
       result,
     );
     expect(response).toEqual(

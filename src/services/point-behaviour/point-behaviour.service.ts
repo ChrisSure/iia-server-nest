@@ -1,6 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { Region } from '../region/interfaces/region.interface';
 import { Statistic } from '../statistic/interfaces/statistic.interface';
+import {
+  POINT_THRESHOLD_HIGH,
+  POINT_ADJUSTED_HIGH,
+  POINT_THRESHOLD_MEDIUM,
+  POINT_ADJUSTED_MEDIUM,
+  POINT_TIME_ADJUSTMENT_MAX_THRESHOLD,
+  POINT_TIME_ADJUSTMENT_MIN_THRESHOLD,
+  POINT_INCREMENT,
+  STATISTICAL_DAY_OFFSET,
+} from './constants/point-thresholds';
+import {
+  CRITICAL_HIGH_THREAT_REGIONS,
+  KEY_MEDIUM_THREAT_REGIONS,
+} from './constants/region-groups';
 
 @Injectable()
 export class PointBehaviourService {
@@ -26,15 +40,21 @@ export class PointBehaviourService {
     const regionsKeys = await this.getRegionsKeys();
     let newPoint = biggerPoint;
     switch (biggerPoint) {
-      case 80:
-        newPoint = (await this.regionValueExist([1, 13, 14], regionsKeys))
-          ? 85
-          : 80;
+      case POINT_THRESHOLD_HIGH:
+        newPoint = (await this.regionValueExist(
+          CRITICAL_HIGH_THREAT_REGIONS,
+          regionsKeys,
+        ))
+          ? POINT_ADJUSTED_HIGH
+          : POINT_THRESHOLD_HIGH;
         break;
-      case 40:
-        newPoint = (await this.regionValueExist([9, 10, 15, 22], regionsKeys))
-          ? 50
-          : 40;
+      case POINT_THRESHOLD_MEDIUM:
+        newPoint = (await this.regionValueExist(
+          KEY_MEDIUM_THREAT_REGIONS,
+          regionsKeys,
+        ))
+          ? POINT_ADJUSTED_MEDIUM
+          : POINT_THRESHOLD_MEDIUM;
         break;
     }
     return newPoint;
@@ -49,16 +69,19 @@ export class PointBehaviourService {
     const hour = currentDate.getUTCHours();
     const day = currentDate.getUTCDay();
 
-    if (newPoint < 80 && newPoint > 4) {
-      if (day === statisticReport.maxDay + 1) {
-        newPoint = newPoint + 5;
+    if (
+      newPoint < POINT_TIME_ADJUSTMENT_MAX_THRESHOLD &&
+      newPoint > POINT_TIME_ADJUSTMENT_MIN_THRESHOLD
+    ) {
+      if (day === statisticReport.maxDay + STATISTICAL_DAY_OFFSET) {
+        newPoint = newPoint + POINT_INCREMENT;
       }
 
       if (
         hour === statisticReport.firstMaxHour ||
         hour === statisticReport.secondMaxHour
       ) {
-        newPoint = newPoint + 5;
+        newPoint = newPoint + POINT_INCREMENT;
       }
     }
 

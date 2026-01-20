@@ -1,6 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { Unit } from '../../repositories/unit/interface/unit.interface';
+import { TELEGRAM_CHAT } from '../../constants/global';
+import { NotificationLevel } from './enums/notification-level.enum';
+import { NOTIFICATION_MESSAGES, PERCENTAGE_SYMBOL } from './constants/messages';
+import { TELEGRAM_SEND_ERROR } from './constants/errors';
+import {
+  ALARM_PROBABILITY_LOW_THRESHOLD,
+  ALARM_PROBABILITY_HIGH_THRESHOLD,
+  ALARM_PROBABILITY_MAX,
+} from './constants/thresholds';
 
 @Injectable()
 export class MessengerService {
@@ -15,7 +24,7 @@ export class MessengerService {
       lastResult,
       isFastResult,
     );
-    if (result !== lastResult && level !== '') {
+    if (result !== lastResult && level !== NotificationLevel.NONE) {
       const message = await this.generateMessage(level, result);
       const link = await this.getConnectionLink(message);
       if (link) {
@@ -23,78 +32,94 @@ export class MessengerService {
           .get(link)
           .then()
           .catch(function (error) {
-            console.log(error, 'Error while send message to Telegram');
+            console.log(error, TELEGRAM_SEND_ERROR);
           });
       }
     }
   }
 
   async isFastAlarm(result: number, lastUnit: Unit): Promise<boolean> {
-    return result === 100 && lastUnit.point < 40;
+    return (
+      result === ALARM_PROBABILITY_MAX &&
+      lastUnit.point < ALARM_PROBABILITY_LOW_THRESHOLD
+    );
   }
 
   async getNotificationLevel(
     result: number,
     lastResult: number,
     isFastResult: boolean,
-  ): Promise<string> {
-    if (result < 40 && lastResult >= 40 && lastResult !== 100) {
-      return 'low';
+  ): Promise<NotificationLevel> {
+    if (
+      result < ALARM_PROBABILITY_LOW_THRESHOLD &&
+      lastResult >= ALARM_PROBABILITY_LOW_THRESHOLD &&
+      lastResult !== ALARM_PROBABILITY_MAX
+    ) {
+      return NotificationLevel.LOW;
     }
 
-    if (result >= 40 && result < 80 && (lastResult >= 80 || lastResult < 40)) {
-      return 'average';
+    if (
+      result >= ALARM_PROBABILITY_LOW_THRESHOLD &&
+      result < ALARM_PROBABILITY_HIGH_THRESHOLD &&
+      (lastResult >= ALARM_PROBABILITY_HIGH_THRESHOLD ||
+        lastResult < ALARM_PROBABILITY_LOW_THRESHOLD)
+    ) {
+      return NotificationLevel.AVERAGE;
     }
 
-    if (result >= 80 && result < 100 && lastResult < 80) {
-      return 'high';
+    if (
+      result >= ALARM_PROBABILITY_HIGH_THRESHOLD &&
+      result < ALARM_PROBABILITY_MAX &&
+      lastResult < ALARM_PROBABILITY_HIGH_THRESHOLD
+    ) {
+      return NotificationLevel.HIGH;
     }
 
-    if (result !== 100 && lastResult === 100) {
-      return 'rebound';
+    if (
+      result !== ALARM_PROBABILITY_MAX &&
+      lastResult === ALARM_PROBABILITY_MAX
+    ) {
+      return NotificationLevel.REBOUND;
     }
 
-    if (result === 100 && lastResult !== 100 && !isFastResult) {
-      return 'alarm';
+    if (
+      result === ALARM_PROBABILITY_MAX &&
+      lastResult !== ALARM_PROBABILITY_MAX &&
+      !isFastResult
+    ) {
+      return NotificationLevel.ALARM;
     }
 
-    if (result === 100 && lastResult !== 100 && isFastResult) {
-      return 'alarm-fast';
+    if (
+      result === ALARM_PROBABILITY_MAX &&
+      lastResult !== ALARM_PROBABILITY_MAX &&
+      isFastResult
+    ) {
+      return NotificationLevel.ALARM_FAST;
     }
-    return '';
+    return NotificationLevel.NONE;
   }
 
-  async generateMessage(level: string, result: number): Promise<string> {
-    let message = '';
-    switch (level) {
-      case 'low':
-        message = `Імовірність Повітряної Тривоги - НИЗЬКА(${result}%)`;
-        break;
-      case 'average':
-        message = `Імовірність Повітряної Тривоги - СЕРЕДНЯ(${result}%)`;
-        break;
-      case 'high':
-        message = `Імовірність Повітряної Тривоги - ВИСОКА(${result}%)`;
-        break;
-      case 'rebound':
-        message = '🇺🇦 Відбій повітряної тривоги 🇺🇦';
-        break;
-      case 'alarm':
-        message = '🙏 Увага Оголошена Повітряна Тривога 🙏';
-        break;
-      case 'alarm-fast':
-        message =
-          '🛫 Повітряна тривога спровокована злетом носія ракети кинжал 🛫';
-        break;
+  async generateMessage(
+    level: NotificationLevel,
+    result: number,
+  ): Promise<string> {
+    const baseMessage = NOTIFICATION_MESSAGES[level];
+
+    if (
+      level === NotificationLevel.LOW ||
+      level === NotificationLevel.AVERAGE ||
+      level === NotificationLevel.HIGH
+    ) {
+      return `${baseMessage}(${result}${PERCENTAGE_SYMBOL})`;
     }
-    return message;
+
+    return baseMessage;
   }
 
   async getConnectionLink(message: string): Promise<string> {
     return process.env.ENV === 'stage' || process.env.ENV === 'prod'
-      ? encodeURI(
-          `https://api.telegram.org/bot5504688883:AAH1yOYmG8fxn_vYD3ZJFQn1LWF75m2NI_Y/sendMessage?chat_id=-1001615018661&text=${message}`,
-        )
+      ? encodeURI(`${TELEGRAM_CHAT}${message}`)
       : null;
   }
 }

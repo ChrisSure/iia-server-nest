@@ -12,13 +12,12 @@ import { UnitRepository } from './repositories/unit/unit.repository';
 import { MessengerService } from './services/messenger/messenger.service';
 import { HomeController } from './controllers/home.controller';
 import { StatisticService } from './services/statistic/statistic.service';
+import { MONGO_CONNECTION } from './constants/global';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    MongooseModule.forRoot(
-      'mongodb+srv://Mbappe9119:qFl5UtXTlXoRBa92@ifairalarmdev.19uvw.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRoot(MONGO_CONNECTION),
     MongooseModule.forFeature([
       { name: Alarm.name, schema: AlarmSchema },
       { name: Unit.name, schema: UnitSchema },
