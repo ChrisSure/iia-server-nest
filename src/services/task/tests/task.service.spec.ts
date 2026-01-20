@@ -2,17 +2,20 @@ import { TasksService } from '../task.service';
 import { RegionService } from '../../region/region.service';
 import { PointBehaviourService } from '../../point-behaviour/point-behaviour.service';
 import { AlarmService } from '../../alarm/alarm.service';
-import { AlarmRepository } from '../../../repositories/alarm/alarm.repository';
-import { UnitRepository } from '../../../repositories/unit/unit.repository';
+import { AlarmRepositoryPort } from '../../../repositories/alarm/interface/alarm-repository.interface';
+import { UnitRepositoryPort } from '../../../repositories/unit/interface/unit-repository.interface';
 import { Region } from '../../region/interfaces/region.interface';
 import { Test } from '@nestjs/testing';
-import { getModelToken } from '@nestjs/mongoose';
-import { Alarm } from '../../../repositories/alarm/schemas/alarm.schema';
-import { Unit } from '../../../repositories/unit/schemas/unit.schema';
+import { AlarmRecord } from '../../../repositories/alarm/interface/alarm.interface';
+import { Unit } from '../../../repositories/unit/interface/unit.interface';
 import { regionsMock } from './mock/regions.mock';
 import { MessengerService } from '../../messenger/messenger.service';
 import { StatisticService } from '../../statistic/statistic.service';
 import { Statistic } from '../../statistic/interfaces/statistic.interface';
+import {
+  ALARM_REPOSITORY,
+  UNIT_REPOSITORY,
+} from '../../../repositories/repository.tokens';
 
 describe('TasksService', () => {
   let tasksService: TasksService;
@@ -21,8 +24,8 @@ describe('TasksService', () => {
   let alarmService: AlarmService;
   let messengerService: MessengerService;
   let statisticService: StatisticService;
-  let alarmRepository: AlarmRepository;
-  let unitRepository: UnitRepository;
+  let alarmRepository: AlarmRepositoryPort;
+  let unitRepository: UnitRepositoryPort;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -34,10 +37,23 @@ describe('TasksService', () => {
         AlarmService,
         MessengerService,
         StatisticService,
-        AlarmRepository,
-        { provide: getModelToken(Alarm.name), useValue: jest.fn() },
-        UnitRepository,
-        { provide: getModelToken(Unit.name), useValue: jest.fn() },
+        {
+          provide: ALARM_REPOSITORY,
+          useValue: {
+            create: jest.fn(),
+            findLast: jest.fn(),
+            getAll: jest.fn(),
+          },
+        },
+        {
+          provide: UNIT_REPOSITORY,
+          useValue: {
+            create: jest.fn(),
+            findLast: jest.fn(),
+            findLastFromRecent: jest.fn(),
+            removeAllUnits: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -49,8 +65,8 @@ describe('TasksService', () => {
     alarmService = module.get<AlarmService>(AlarmService);
     messengerService = module.get<MessengerService>(MessengerService);
     statisticService = module.get<StatisticService>(StatisticService);
-    alarmRepository = module.get<AlarmRepository>(AlarmRepository);
-    unitRepository = module.get<UnitRepository>(UnitRepository);
+    alarmRepository = module.get<AlarmRepositoryPort>(ALARM_REPOSITORY);
+    unitRepository = module.get<UnitRepositoryPort>(UNIT_REPOSITORY);
   });
 
   it('handleCronAlarm', async () => {
@@ -76,12 +92,18 @@ describe('TasksService', () => {
       resolve(true);
     });
     const getAllAlarmsPromise = new Promise((resolve) => {
-      const alarm1: Alarm = { date: new Date(new Date().getTime() - 3600000) };
-      const alarm2: Alarm = { date: new Date(new Date().getTime() - 3610000) };
+      const alarm1: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3600000),
+      };
+      const alarm2: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3610000),
+      };
       resolve([alarm1, alarm2]);
     });
     const findLastAlarmPromise = new Promise((resolve) => {
-      const alarm: Alarm = { date: new Date(new Date().getTime() - 3600000) };
+      const alarm: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3600000),
+      };
       resolve(alarm);
     });
     const isAlarmUnitPromise = new Promise((resolve) => {
@@ -89,7 +111,9 @@ describe('TasksService', () => {
       resolve(unit);
     });
     const createAlarmPromise = new Promise((resolve) => {
-      const alarm: Alarm = { date: new Date(new Date().getTime() - 3600000) };
+      const alarm: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3600000),
+      };
       resolve(alarm);
     });
     const createUnitPromise = new Promise((resolve) => {
@@ -164,12 +188,18 @@ describe('TasksService', () => {
       resolve(false);
     });
     const getAllAlarmsPromise = new Promise((resolve) => {
-      const alarm1: Alarm = { date: new Date(new Date().getTime() - 3600000) };
-      const alarm2: Alarm = { date: new Date(new Date().getTime() - 3610000) };
+      const alarm1: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3600000),
+      };
+      const alarm2: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3610000),
+      };
       resolve([alarm1, alarm2]);
     });
     const findLastAlarmPromise = new Promise((resolve) => {
-      const alarm: Alarm = { date: new Date(new Date().getTime() - 3600000) };
+      const alarm: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3600000),
+      };
       resolve(alarm);
     });
     const isAlarmUnitPromise = new Promise((resolve) => {
@@ -177,7 +207,9 @@ describe('TasksService', () => {
       resolve(unit);
     });
     const createAlarmPromise = new Promise((resolve) => {
-      const alarm: Alarm = { date: new Date(new Date().getTime() - 3600000) };
+      const alarm: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3600000),
+      };
       resolve(alarm);
     });
     const createUnitPromise = new Promise((resolve) => {
@@ -255,12 +287,18 @@ describe('TasksService', () => {
       resolve(false);
     });
     const getAllAlarmsPromise = new Promise((resolve) => {
-      const alarm1: Alarm = { date: new Date(new Date().getTime() - 3600000) };
-      const alarm2: Alarm = { date: new Date(new Date().getTime() - 3610000) };
+      const alarm1: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3600000),
+      };
+      const alarm2: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3610000),
+      };
       resolve([alarm1, alarm2]);
     });
     const findLastAlarmPromise = new Promise((resolve) => {
-      const alarm: Alarm = { date: new Date(new Date().getTime() - 3600000) };
+      const alarm: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3600000),
+      };
       resolve(alarm);
     });
     const isAlarmUnitPromise = new Promise((resolve) => {
@@ -268,7 +306,9 @@ describe('TasksService', () => {
       resolve(unit);
     });
     const createAlarmPromise = new Promise((resolve) => {
-      const alarm: Alarm = { date: new Date(new Date().getTime() - 3600000) };
+      const alarm: AlarmRecord = {
+        date: new Date(new Date().getTime() - 3600000),
+      };
       resolve(alarm);
     });
     const createUnitPromise = new Promise((resolve) => {

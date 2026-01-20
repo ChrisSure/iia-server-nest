@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { RegionService } from '../region/region.service';
 import { Region } from '../region/interfaces/region.interface';
@@ -6,10 +6,10 @@ import { PointBehaviourService } from '../point-behaviour/point-behaviour.servic
 import { AlarmService } from '../alarm/alarm.service';
 import { CreateAlarmDto } from '../../repositories/alarm/dtos/create-alarm.dto';
 import { CreateUnitDto } from '../../repositories/unit/dtos/create-unit.dto';
-import { AlarmRepository } from '../../repositories/alarm/alarm.repository';
-import { UnitRepository } from '../../repositories/unit/unit.repository';
-import { Alarm } from '../../repositories/alarm/schemas/alarm.schema';
-import { Unit } from '../../repositories/unit/schemas/unit.schema';
+import { AlarmRepositoryPort } from '../../repositories/alarm/interface/alarm-repository.interface';
+import { UnitRepositoryPort } from '../../repositories/unit/interface/unit-repository.interface';
+import { AlarmRecord } from '../../repositories/alarm/interface/alarm.interface';
+import { Unit } from '../../repositories/unit/interface/unit.interface';
 import { MessengerService } from '../messenger/messenger.service';
 import { StatisticService } from '../statistic/statistic.service';
 import { Statistic } from '../statistic/interfaces/statistic.interface';
@@ -17,6 +17,10 @@ import {
   ALARM_STATE_ACTIVE,
   ALARM_STATE_RESET,
 } from './constants/alarm-states';
+import {
+  ALARM_REPOSITORY,
+  UNIT_REPOSITORY,
+} from '../../repositories/repository.tokens';
 
 @Injectable()
 export class TasksService {
@@ -26,8 +30,8 @@ export class TasksService {
   private _alarmService: AlarmService;
   private _messengerService: MessengerService;
   private _statisticService: StatisticService;
-  private _alarmRepository: AlarmRepository;
-  private _unitRepository: UnitRepository;
+  private _alarmRepository: AlarmRepositoryPort;
+  private _unitRepository: UnitRepositoryPort;
   currentDate: Date;
 
   constructor(
@@ -36,8 +40,8 @@ export class TasksService {
     alarmService: AlarmService,
     messengerService: MessengerService,
     statisticService: StatisticService,
-    alarmRepository: AlarmRepository,
-    unitRepository: UnitRepository,
+    @Inject(ALARM_REPOSITORY) alarmRepository: AlarmRepositoryPort,
+    @Inject(UNIT_REPOSITORY) unitRepository: UnitRepositoryPort,
   ) {
     this._regionService = regionService;
     this._pointBehaviourService = pointBehaviourService;
@@ -76,7 +80,8 @@ export class TasksService {
         );
 
         // Get last alarm
-        const lastAlarm: Alarm = await this._alarmRepository.findLast();
+        const lastAlarm: AlarmRecord | null =
+          await this._alarmRepository.findLast();
 
         if (lastAlarm) {
           // Check if alarm gone
@@ -95,8 +100,8 @@ export class TasksService {
         }
 
         // Get last unit
-        const lastUnit: Unit = await this._unitRepository.findLast();
-        const lastUnitRecent: Unit =
+        const lastUnit: Unit | null = await this._unitRepository.findLast();
+        const lastUnitRecent: Unit | null =
           await this._unitRepository.findLastFromRecent();
 
         // Send notification via Telegram

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Alarm } from '../../repositories/alarm/schemas/alarm.schema';
+import { AlarmRecord } from '../../repositories/alarm/interface/alarm.interface';
 import { MaxValue } from './interfaces/maxValue.interface';
 import { Statistic } from './interfaces/statistic.interface';
 
 @Injectable()
 export class StatisticService {
-  async getReport(alarms: Alarm[]): Promise<Statistic> {
+  async getReport(alarms: AlarmRecord[]): Promise<Statistic> {
     const hoursData = [];
     const daysData = [];
     const lastAlarms = alarms.slice(-50);

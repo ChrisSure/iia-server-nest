@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Unit, UnitDocument } from './schemas/unit.schema';
-import { CreateUnitDto } from './dtos/create-unit.dto';
+import { Unit, UnitDocument } from '../schemas/unit.schema';
+import { CreateUnitDto } from '../dtos/create-unit.dto';
+import { UnitRepositoryPort } from '../interface/unit-repository.interface';
+import { Unit as UnitRecord } from '../interface/unit.interface';
 
 @Injectable()
-export class UnitRepository {
+export class MongoUnitRepository implements UnitRepositoryPort {
   constructor(@InjectModel(Unit.name) private unitModel: Model<UnitDocument>) {}
 
-  async create(createUnitDto: CreateUnitDto): Promise<Unit> {
+  async create(createUnitDto: CreateUnitDto): Promise<UnitRecord> {
     const createdUnit = new this.unitModel(createUnitDto);
     return createdUnit.save();
   }
 
-  async findLast(): Promise<Unit> {
+  async findLast(): Promise<UnitRecord | null> {
     const lastUnit = await this.unitModel.find({}).sort({ _id: -1 }).limit(1);
-    if (lastUnit) {
-      return lastUnit[0];
-    }
+    return lastUnit.length > 0 ? lastUnit[0] : null;
   }
 
-  async findLastFromRecent(): Promise<Unit | null> {
+  async findLastFromRecent(): Promise<UnitRecord | null> {
     const lastFive = await this.unitModel
       .find()
       .sort({ _id: -1 })

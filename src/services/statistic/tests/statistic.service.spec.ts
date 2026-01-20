@@ -1,7 +1,7 @@
 import { StatisticService } from '../statistic.service';
 import { Statistic } from '../interfaces/statistic.interface';
 import { MaxValue } from '../interfaces/maxValue.interface';
-import { Alarm } from '../../../repositories/alarm/schemas/alarm.schema';
+import { AlarmRecord } from '../../../repositories/alarm/interface/alarm.interface';
 
 describe('StatisticService', () => {
   const service: StatisticService = new StatisticService();
@@ -10,7 +10,7 @@ describe('StatisticService', () => {
     secondMaxHour: 10,
     maxDay: 3,
   };
-  const alarms: Alarm[] = [
+  const alarms: AlarmRecord[] = [
     { date: new Date('2022-10-26T08:14:00.108Z') },
     { date: new Date('2022-10-26T12:14:00.108Z') },
     { date: new Date('2022-10-26T08:14:00.108Z') },

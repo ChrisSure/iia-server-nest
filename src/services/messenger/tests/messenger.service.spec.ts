@@ -1,5 +1,6 @@
 import { MessengerService } from '../messenger.service';
 import { NotificationLevel } from '../enums/notification-level.enum';
+import { TELEGRAM_CHAT } from '../../../constants/global';
 import { unitMock } from './mock/unit.mock';
 
 describe('MessengerService', () => {
@@ -98,9 +99,7 @@ describe('MessengerService', () => {
   it('getConnectionLink stage', async () => {
     process.env.ENV = 'stage';
     const message = '🙏 Увага Оголошена Повітряна Тривога 🙏';
-    const testMessage = encodeURI(
-      `https://api.telegram.org/bot5504688883:AAH1yOYmG8fxn_vYD3ZJFQn1LWF75m2NI_Y/sendMessage?chat_id=-1001615018661&text=${message}`,
-    );
+    const testMessage = encodeURI(`${TELEGRAM_CHAT}${message}`);
     const response: string = await service.getConnectionLink(message);
     expect(response).toEqual(testMessage);
   });
